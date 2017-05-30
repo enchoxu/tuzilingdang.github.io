@@ -1,0 +1,328 @@
+
+ <!DOCTYPE HTML>
+<html lang="中文">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>JavaScript学习笔记-函数柯里化 | April&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="April Ji">
+    
+    <meta name="description" content="最近《JavaScript语言精粹》这本书看到函数一章，提到了函数柯里化。之前在别的博客里也见过，没有仔细留意，只觉得好抽象的名词，略过…这次仔细地读了一遍，写篇博客记录下来防止有记忆的脑细胞躲起来不见我了。
+柯里化是什么看了半天，柯里化应该就是，本来一个函数接受多个参数，柯里化之后变成传单一参数进">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/april.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/april.jpg" alt="April&#39;s Blog" title="April&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
+				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/resume">about me</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/07/JavaScript学习笔记-函数柯里化/" title="JavaScript学习笔记-函数柯里化" itemprop="url">JavaScript学习笔记-函数柯里化</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="April Ji">April Ji</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-03-07T06:34:08.000Z" itemprop="datePublished">2017-03-07</time>
+    Updated:<time datetime="2017-05-30T13:11:12.000Z" itemprop="dateModified">2017-05-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#柯里化是什么"><span class="toc-number">1.</span> <span class="toc-text">柯里化是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要柯里化"><span class="toc-number">2.</span> <span class="toc-text">为什么要柯里化</span></a></li></ol>
+		</div>
+		
+		<p>最近《JavaScript语言精粹》这本书看到函数一章，提到了函数柯里化。之前在别的博客里也见过，没有仔细留意，只觉得好抽象的名词，略过…这次仔细地读了一遍，写篇博客记录下来防止有记忆的脑细胞躲起来不见我了。</p>
+<h3 id="柯里化是什么"><a href="#柯里化是什么" class="headerlink" title="柯里化是什么"></a>柯里化是什么</h3><p>看了半天，柯里化应该就是，本来一个函数接受多个参数，柯里化之后变成传单一参数进来，但是会用上原来一串参数合在一起，返回一个最终的结果。其实也就是原来传进来的参数通过闭包保存下来，再加上新的参数进行处理。<br>啥都不说了，先上个书中的例子：</p>
+<p><img src="/img/JavaScript学习笔记-函数柯里化/1.png" alt="43"></p>
+<p>调用一下：</p>
+<p><img src="/img/JavaScript学习笔记-函数柯里化/2.png" alt="43"></p>
+<p>这里要注意，arguments作为函数默认传入的参数，它并不是一个数组，而真实的身份是对象。所以method这个函数要写成下面这个样子，是运行不出来滴。</p>
+<p><img src="/img/JavaScript学习笔记-函数柯里化/3.png" alt="43"></p>
+<p>所以输出的结果第一遍有个报错提示，第二遍就有结果了。</p>
+<p><img src="/img/JavaScript学习笔记-函数柯里化/4.png" alt="43"></p>
+<h3 id="为什么要柯里化"><a href="#为什么要柯里化" class="headerlink" title="为什么要柯里化"></a>为什么要柯里化</h3><p>好好的函数，if else写出来也可以运行的稳稳的，为什么要用这种抽象的技巧来实现呢？《语言精粹》柯里化这里也就小半页，只讲了个add函数相关的例子。还是拿大红宝书-高级程序设计对比一下看看。</p>
+<p>与柯里化最相关的是函数绑定，柯里化基本方法和函数绑定是一样的。唯一不同的是柯里化调用了一个函数，返回的函数需要在传入参数。</p>
+<p>说了半天，到底能应用在什么地方呢？看了挺多相关内容对柯里化的作用都解释的不是很清楚。能想到到就是减少函数复用. 另外在ES5中，bind（）函数也用到了。IE’6~8不能使用bind（）函数，自己写的话就是下面这样子：</p>
+<p><img src="/img/JavaScript学习笔记-函数柯里化/5.png" alt="43"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/柯里化/">柯里化</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2017/03/07/JavaScript学习笔记-函数柯里化/" data-title="JavaScript学习笔记-函数柯里化 | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/03/08/JS事件-2-touch事件的兼容问题/" title="JS事件(2)-touch事件的兼容问题">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  JS事件(2)-touch事件的兼容问题</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/02/26/移动Web开发之远程调试（2）/"  title="移动Web开发之远程真机、模拟调试（2）">
+ <strong>NEXT:</strong><br/> 
+ <span>移动Web开发之远程真机、模拟调试（2）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#柯里化是什么"><span class="toc-number">1.</span> <span class="toc-text">柯里化是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要柯里化"><span class="toc-number">2.</span> <span class="toc-text">为什么要柯里化</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
+		
+			<li><a href="/tags/touch事件/" title="touch事件">touch事件<sup>1</sup></a></li>
+		
+			<li><a href="/tags/事件-冒泡/" title="事件 冒泡">事件 冒泡<sup>1</sup></a></li>
+		
+			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
+		
+			<li><a href="/tags/柯里化/" title="柯里化">柯里化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/真机-微信-远程调试/" title="真机 微信 远程调试">真机 微信 远程调试<sup>2</sup></a></li>
+		
+			<li><a href="/tags/脚手架工具/" title="脚手架工具">脚手架工具<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/tuzilingdang for https://github.com/tuzilingdang" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2017 
+		
+		<a href="http://yoursite.com" target="_blank" title="April Ji">April Ji</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>

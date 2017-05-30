@@ -1,0 +1,312 @@
+
+ <!DOCTYPE HTML>
+<html lang="中文">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>关于Http Cookie的跨域问题 | April&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="April Ji">
+    
+    <meta name="description" content="问题最近接了新的活动需求，很多流程虽然与原项目一样，但是原项目代码已经不容易维护了，所以合计了一下，单独拿出来重新写一遍，项目目录结构、类库选用了最近做的活动项目模板。终于完善好了整个项目结构，写好了页面开始写业务逻辑了。 然而，就在调通了登录接口之后，发现不管调啥接口，全部都返回“用户未登录的状态">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/april.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/april.jpg" alt="April&#39;s Blog" title="April&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
+				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/resume">about me</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/22/关于Http Cookie的跨域问题/" title="关于Http Cookie的跨域问题" itemprop="url">关于Http Cookie的跨域问题</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="April Ji">April Ji</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-04-22T07:20:46.000Z" itemprop="datePublished">2017-04-22</time>
+    Updated:<time datetime="2017-05-30T13:11:12.000Z" itemprop="dateModified">2017-05-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题的解决之道"><span class="toc-number">1.1.</span> <span class="toc-text">问题的解决之道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Request-Coolkies-的来历"><span class="toc-number">1.2.</span> <span class="toc-text">Request Coolkies 的来历</span></a></li></ol></li></ol>
+		</div>
+		
+		<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>最近接了新的活动需求，很多流程虽然与原项目一样，但是原项目代码已经不容易维护了，所以合计了一下，单独拿出来重新写一遍，项目目录结构、类库选用了最近做的活动项目模板。终于完善好了整个项目结构，写好了页面开始写业务逻辑了。 然而，就在调通了登录接口之后，发现不管调啥接口，全部都返回“用户未登录的状态”。 </p>
+<p>现在的开发环境，域名是localhost:8181，这里的路径是本地页面的文件夹路径；nginx配置了反向代理，通过反向代理访问测试环境的后台接口，域名是类似这样的：<a href="https://stg1.test.com。" target="_blank" rel="external">https://stg1.test.com。</a></p>
+<p>同样在本地开发，代理到测试环境后台接口，域名和后台接口域名都一样，原来的页面就可以，但是现在服务器就无法维持用户的登录状态了。</p>
+<p>这时候就想到服务器要维持用户登录状态，需要通过sessionid这个标识，来看看现在的情况，确实这个会话标识变掉了。以下为模拟实验截图：</p>
+<p>接口1-（登录接口）的Cookies信息<br><img src="/img/关于Http Cookie的跨域问题/1.png" alt="43"></p>
+<p> “接口2的Cookies信息”<br><img src="/img/关于Http Cookie的跨域问题/2.png" alt="43"></p>
+<p>现在的JSSESSIONID两个接口返回的不一致。 再开看看原页面的访问情况对比一下，看看哪里不一样了。果然，response cookies两种情况下都有返回，但是发现，原来页面先进行登录，访问接口2时，requst cookies带上了信息。而重写的页面的XHR对象中就没有。</p>
+<p>“原页面的Cookies信息”<br><img src="/img/关于Http Cookie的跨域问题/3.png" alt="43"></p>
+<p>然后问题就来了，看起来明明是一样的接口调用，重写的页面不能保持登录状态，而对比之前页面，唯一的不同就是接口2调用时，Request Cookies里面没有值。 那这个值到底是怎么来的，搞清楚这个问题应该就可以解决了。</p>
+<h3 id="问题的解决之道"><a href="#问题的解决之道" class="headerlink" title="问题的解决之道"></a>问题的解决之道</h3><h3 id="Request-Coolkies-的来历"><a href="#Request-Coolkies-的来历" class="headerlink" title="Request Coolkies 的来历"></a>Request Coolkies 的来历</h3><p>要弄清楚这个问题，还是要从浏览器与服务器二者之间的通信说起。浏览器需要从服务器拿数据，需要通过ajax请求来实现。我们可以在调试工具中观察调用接口信息时，这个Request Cookies 和 Response Cookies是放在XHR这个对象里的。 这个东东的全称就是XmlHttpRequest，ajax中最最重要的东西就是它了。可以这样创建它：</p>
+<pre><code>variable = new XMLHttpRequest();
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2017/04/22/关于Http Cookie的跨域问题/" data-title="关于Http Cookie的跨域问题 | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/03/31/Qbuilt-实现并发布自己的脚手架工具/"  title="Qbuilt-实现并发布自己的脚手架工具(1)">
+ <strong>NEXT:</strong><br/> 
+ <span>Qbuilt-实现并发布自己的脚手架工具(1)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题的解决之道"><span class="toc-number">1.1.</span> <span class="toc-text">问题的解决之道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Request-Coolkies-的来历"><span class="toc-number">1.2.</span> <span class="toc-text">Request Coolkies 的来历</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
+		
+			<li><a href="/tags/touch事件/" title="touch事件">touch事件<sup>1</sup></a></li>
+		
+			<li><a href="/tags/事件-冒泡/" title="事件 冒泡">事件 冒泡<sup>1</sup></a></li>
+		
+			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
+		
+			<li><a href="/tags/柯里化/" title="柯里化">柯里化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/真机-微信-远程调试/" title="真机 微信 远程调试">真机 微信 远程调试<sup>2</sup></a></li>
+		
+			<li><a href="/tags/脚手架工具/" title="脚手架工具">脚手架工具<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/tuzilingdang for https://github.com/tuzilingdang" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2017 
+		
+		<a href="http://yoursite.com" target="_blank" title="April Ji">April Ji</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>

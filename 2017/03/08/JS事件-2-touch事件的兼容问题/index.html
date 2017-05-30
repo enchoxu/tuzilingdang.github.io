@@ -1,0 +1,393 @@
+
+ <!DOCTYPE HTML>
+<html lang="中文">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>JS事件(2)-touch事件的兼容问题 | April&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="April Ji">
+    
+    <meta name="description" content="开发移动端Web网页时，对于手持设备，点击、滑动、双击等均会用到touch事件。很多简单的情况下，对于点击事件，直接用对click做一个监听，也可以实现触发相应的事件，对该事件做一个回调函数的处理。
+对于稍微复杂的情况，直接绑定一个click并不是一个好方法。 最近就碰到这样一个问题。
+遇到问题项目">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/april.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/april.jpg" alt="April&#39;s Blog" title="April&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
+				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/resume">about me</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/08/JS事件-2-touch事件的兼容问题/" title="JS事件(2)-touch事件的兼容问题" itemprop="url">JS事件(2)-touch事件的兼容问题</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="April Ji">April Ji</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-03-08T10:02:00.000Z" itemprop="datePublished">2017-03-08</time>
+    Updated:<time datetime="2017-05-30T13:11:12.000Z" itemprop="dateModified">2017-05-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#遇到问题"><span class="toc-number">1.</span> <span class="toc-text">遇到问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现问题"><span class="toc-number">2.</span> <span class="toc-text">发现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回顾设备事件"><span class="toc-number">3.</span> <span class="toc-text">回顾设备事件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#触摸事件"><span class="toc-number">3.1.</span> <span class="toc-text">触摸事件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#手势事件"><span class="toc-number">3.2.</span> <span class="toc-text">手势事件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#手势事件与触摸事件的关系"><span class="toc-number">3.2.1.</span> <span class="toc-text">手势事件与触摸事件的关系:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#手势事件与触摸事件的不同"><span class="toc-number">3.2.2.</span> <span class="toc-text">手势事件与触摸事件的不同:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真机试验"><span class="toc-number">4.</span> <span class="toc-text">真机试验</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#安卓下的点击和滑动的移动距离"><span class="toc-number">4.0.1.</span> <span class="toc-text">安卓下的点击和滑动的移动距离</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#iOS下的点击和滑动的移动距离"><span class="toc-number">4.0.2.</span> <span class="toc-text">iOS下的点击和滑动的移动距离</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决问题"><span class="toc-number">5.</span> <span class="toc-text">解决问题</span></a></li></ol>
+		</div>
+		
+		<p>开发移动端Web网页时，对于手持设备，点击、滑动、双击等均会用到touch事件。很多简单的情况下，对于点击事件，直接用对click做一个监听，也可以实现触发相应的事件，对该事件做一个回调函数的处理。</p>
+<p>对于稍微复杂的情况，直接绑定一个click并不是一个好方法。 最近就碰到这样一个问题。</p>
+<h3 id="遇到问题"><a href="#遇到问题" class="headerlink" title="遇到问题"></a>遇到问题</h3><p>项目中有一个轮播图， 用了swiper插件，代码是别人写的，写法较为混乱。做兼容测试时发现iOS上很好用啊，到了安卓机上就各种问题， 放到浏览器上测试下也出现这种问题。  具体就是，正常轮播图点击时可以进入图片对应的页面，用户滑动图片时图片相应滑动。 但在安卓机和电脑上发现，每次滑动时会直接误判为点击操作，导致用户不能进入图片链接。</p>
+<p>就这样的轮播图：</p>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/1.png" alt="43"></p>
+<h3 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h3><p>直接用真机调试看看情况，发现除了使用swiper插件，对每个li元素，同时绑定了click事件，通过回调函数来做链接跳转。初步原因判断，可能是代码执行时，还没有开始滑动就先执行了click事件。不管怎样，同时写click暴力解决跳转问题，这样的写法明显是非常不合理的。</p>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/4.png" alt="43"></p>
+<p>不管啥原因，还是先来回顾一下touch事件。</p>
+<h3 id="回顾设备事件"><a href="#回顾设备事件" class="headerlink" title="回顾设备事件"></a>回顾设备事件</h3><h4 id="触摸事件"><a href="#触摸事件" class="headerlink" title="触摸事件"></a>触摸事件</h4><p>触摸事件有这么四种：</p>
+<ol>
+<li>touchstart</li>
+<li>touchmove</li>
+<li>touchend</li>
+<li>touchcancel</li>
+</ol>
+<p>Dom规范中并没有定义触摸事件，但是他们都是可以兼容DOM的，所以鼠标事件常见的属性我们也可以在touch中看到。具体可见本次试验截图。</p>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/6.png" alt="43"></p>
+<p>加上鼠标操作，按照《高级程序设计》写的，这些事件发生的顺序是这样的： touchstart -&gt; mouseover -&gt; mousemove -&gt; mousedown -&gt; mouseup -&gt; click -&gt; touchend 。  有些博客上写的顺序是 touchstart -&gt; touchend -&gt; mouseover -&gt; mousemove -&gt; mousedown -&gt; mouseup -&gt; click 。 有点混乱了。</p>
+<p>但是实验起来，不同系统对touch事件的支持并非是一致的。 国外大神做过全面的测试， 我们可以看到图中的结果。更具体的结果可以参考他的测验结果：</p>
+<p><a href="https://tuzilingdang.github.io" target="_blank" rel="external">https://patrickhlauke.github.io/touch/tests/results/</a></p>
+<p>对于目前使用较多的iOS（8、9暂时没有）及安卓系统版本，引用图片如下：</p>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/2.png" alt="43"></p>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/3.png" alt="43"></p>
+<p>这样看起来，click应该是touchend后发生的。 并且，在移动设备中，click事件有个比较重要的延时300ms的问题。这样应该不可能是因为安卓系统中，click事件早于touchend发生，而导致先执行了这段代码。</p>
+<p>再补充下300ms的问题，因在手持移动设备中，双击会有页面放大的效果。 双击的时间是有间隔的，所以必须在第一次点击时，延时300ms 来判断用户是否会紧接进行第二次点击。 zepto有较好的解决方案，一般使用tap来代替click避免延时问题。</p>
+<h4 id="手势事件"><a href="#手势事件" class="headerlink" title="手势事件"></a>手势事件</h4><p>虽然跟本次的问题无关，还是顺带提一下手势事件，有这么三种:</p>
+<ol>
+<li>gesturestart</li>
+<li>gesturechange</li>
+<li>gestureend</li>
+</ol>
+<p>三个事件的触发条件是两个手指同时在一个元素范围内。</p>
+<h5 id="手势事件与触摸事件的关系"><a href="#手势事件与触摸事件的关系" class="headerlink" title="手势事件与触摸事件的关系:"></a>手势事件与触摸事件的关系:</h5><p> 当一个手指先放在屏幕上，touchstart事件触发 -&gt; 另一个手指放上来时，gesturestart -&gt; 任一手指移动，gesturechange -&gt; 任一手指离开屏幕，<br>gestureend -&gt; 触发该手指的touchend事件 。</p>
+<h5 id="手势事件与触摸事件的不同"><a href="#手势事件与触摸事件的不同" class="headerlink" title="手势事件与触摸事件的不同:"></a>手势事件与触摸事件的不同:</h5><p>多了两个属性: rotation 和 scale。 rotation表示手指变化的旋转，正值顺时针，负值逆时针。 scale代表手指间距离的变化。</p>
+<p>好了，啰嗦到此，排除click执行顺序问题，那很有可能是touch时间iOS和安卓的一些支持不同，也就是安卓很可能不能准确判断touchmove。 还是那手机来测试一下。</p>
+<h3 id="真机试验"><a href="#真机试验" class="headerlink" title="真机试验"></a>真机试验</h3><p>首先，改造下代码，看看touchmove这一步是怎么执行的。</p>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/5.png" alt="43"></p>
+<p>写一个touchmoveFlag，判断是否进入了touchmove。分别用iPhone和安卓机进行测试，发现单纯做点击操作时，iPhone很正常的直接略过，touchmoveFlag的值为false没有变。 然而安卓每次点击都会直接出发touchmove，变为true。  </p>
+<p>所以，安卓对touchmove的判断相当的不准确啊。</p>
+<p>所以现在目标问题就是，怎么在安卓touchmov任何操作都触发的情况下准确区分出点击和滑动。 touchmove不管用，那就只剩距离判断了。</p>
+<p>憋出大招，用事件的targetTouches属性来计算滑动距离，代码如下。</p>
+<pre><code>var startPoint = {}, endPoint  ={};
+$(&quot;#vipList .swiper-container ul li&quot;).unbind()
+.on(&apos;touchstart&apos;,function(e){
+    startPoint.x = e.targetTouches[0].clientX;
+    endPoint.x = e.targetTouches[0].clientX;
+})
+.on(&apos;touchmove&apos;,function(e){
+     endPoint.x = e.targetTouches[0].clientX;
+}).on(&apos;touchend&apos;,function(e){
+    var moveDistance = startPoint.x - endPoint.x;  
+    console.log(&quot;moveDistance:&quot;+moveDistance);
+}
+</code></pre><p>试验结果如下：</p>
+<h5 id="安卓下的点击和滑动的移动距离"><a href="#安卓下的点击和滑动的移动距离" class="headerlink" title="安卓下的点击和滑动的移动距离"></a>安卓下的点击和滑动的移动距离</h5><ol>
+<li>点击</li>
+</ol>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/7.png" alt="43"></p>
+<p>大于7的都是幅度比较大的点击，有的是指头横按一下可能会造成多点触碰距离会大于10，20.</p>
+<ol>
+<li>滑动</li>
+</ol>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/8.png" alt="43"></p>
+<p>向左滑动为整数，向右滑动为负数。 正常的滑动都在绝对值30 以上。</p>
+<h5 id="iOS下的点击和滑动的移动距离"><a href="#iOS下的点击和滑动的移动距离" class="headerlink" title="iOS下的点击和滑动的移动距离"></a>iOS下的点击和滑动的移动距离</h5><p>不得不说，iOS对触摸事件的精确度真的是相当高啊，测试完比安卓准确很多，基本无误差。<br>前面小圆点中的是点击次数。</p>
+<ol>
+<li>点击</li>
+</ol>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/9.png" alt="43"><br>基本所有正常的点击，其中连续点击了28次移动距离全部是0. 绝对值大于10的都是很夸张的情况了。</p>
+<ol>
+<li>滑动</li>
+</ol>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/10.png" alt="43"></p>
+<p>滑动也感觉触点距离很准确呢。</p>
+<h3 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h3><p>最后代码变成这样：</p>
+<p><img src="/img/JS事件-2-touch事件的兼容问题/11.png" alt="43"></p>
+<p>在真机上测试一遍，非常完美，各种机子上都没问题了。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/touch事件/">touch事件</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2017/03/08/JS事件-2-touch事件的兼容问题/" data-title="JS事件(2)-touch事件的兼容问题 | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/03/10/鼠标左键弹出菜单的实现/" title="JS事件(1)-小练习-鼠标左键（右键）弹出菜单">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  JS事件(1)-小练习-鼠标左键（右键）弹出菜单</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/03/07/JavaScript学习笔记-函数柯里化/"  title="JavaScript学习笔记-函数柯里化">
+ <strong>NEXT:</strong><br/> 
+ <span>JavaScript学习笔记-函数柯里化
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#遇到问题"><span class="toc-number">1.</span> <span class="toc-text">遇到问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现问题"><span class="toc-number">2.</span> <span class="toc-text">发现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回顾设备事件"><span class="toc-number">3.</span> <span class="toc-text">回顾设备事件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#触摸事件"><span class="toc-number">3.1.</span> <span class="toc-text">触摸事件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#手势事件"><span class="toc-number">3.2.</span> <span class="toc-text">手势事件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#手势事件与触摸事件的关系"><span class="toc-number">3.2.1.</span> <span class="toc-text">手势事件与触摸事件的关系:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#手势事件与触摸事件的不同"><span class="toc-number">3.2.2.</span> <span class="toc-text">手势事件与触摸事件的不同:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真机试验"><span class="toc-number">4.</span> <span class="toc-text">真机试验</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#安卓下的点击和滑动的移动距离"><span class="toc-number">4.0.1.</span> <span class="toc-text">安卓下的点击和滑动的移动距离</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#iOS下的点击和滑动的移动距离"><span class="toc-number">4.0.2.</span> <span class="toc-text">iOS下的点击和滑动的移动距离</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决问题"><span class="toc-number">5.</span> <span class="toc-text">解决问题</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
+		
+			<li><a href="/tags/touch事件/" title="touch事件">touch事件<sup>1</sup></a></li>
+		
+			<li><a href="/tags/事件-冒泡/" title="事件 冒泡">事件 冒泡<sup>1</sup></a></li>
+		
+			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
+		
+			<li><a href="/tags/柯里化/" title="柯里化">柯里化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/真机-微信-远程调试/" title="真机 微信 远程调试">真机 微信 远程调试<sup>2</sup></a></li>
+		
+			<li><a href="/tags/脚手架工具/" title="脚手架工具">脚手架工具<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/tuzilingdang for https://github.com/tuzilingdang" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2017 
+		
+		<a href="http://yoursite.com" target="_blank" title="April Ji">April Ji</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,348 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>April</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="April Ji">
+    
+    <meta name="description" content="title: 移动Web开发之远程真机、模拟调试（1）date: 2017-02-25 14:19:01tags:— 真机调试 微信调试 safari iOS  chrome 安卓
+远程调试的三种情况一般做移动端网页开发时，经常会出现在浏览器开发工具上调试完之后，明明没问题啊，怎么一上线用手机一看效">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/april.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/april.jpg" alt="April" title="April"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="April">April</a></h1>
+				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/27/移动Web开发之远程调试（1）/" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="April Ji">April Ji</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-03-27T06:19:01.000Z" itemprop="datePublished">2017-03-27</time>
+    更新日期:<time datetime="2017-03-27T08:15:28.000Z" itemprop="dateModified">2017-03-27</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#远程调试的三种情况"><span class="toc-number">1.</span> <span class="toc-text">远程调试的三种情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安卓上的调试"><span class="toc-number">2.</span> <span class="toc-text">安卓上的调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iOS的调试"><span class="toc-number">3.</span> <span class="toc-text">iOS的调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#微信开发者工具的调试"><span class="toc-number">4.</span> <span class="toc-text">微信开发者工具的调试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#公众号开发"><span class="toc-number">4.1.</span> <span class="toc-text">公众号开发</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#小程序开发"><span class="toc-number">4.2.</span> <span class="toc-text">小程序开发</span></a></li></ol></li></ol>
+		</div>
+		
+		<hr>
+<p>title: 移动Web开发之远程真机、模拟调试（1）<br>date: 2017-02-25 14:19:01<br>tags:<br>— 真机调试 微信调试 safari iOS  chrome 安卓</p>
+<h3 id="远程调试的三种情况"><a href="#远程调试的三种情况" class="headerlink" title="远程调试的三种情况"></a>远程调试的三种情况</h3><p>一般做移动端网页开发时，经常会出现在浏览器开发工具上调试完之后，明明没问题啊，怎么一上线用手机一看效果偏差这么大呢。 最近应产品同事要求，网页除了微信端可以使用，还要应用到各种浏览器中。 那就做一次兼容测试，再根据情况看看怎么修改吧。 有的bug在浏览器上调试时重现不了哇，那就得用真机调试，看看问题出在哪里。 bug改完了，顺手总结下一直以来常用的真机调试的几种方法。</p>
+<p>一般情况下，我们经常会碰到有的问题在iOS系统上和安卓系统上表现不一样，会有这几种需要调试的情况：</p>
+<ol>
+<li>安卓系统上出现问题，这时候通过chrome浏览器来调试。</li>
+<li>iOS出现问题，通过Safari来调试。</li>
+<li>开发需要投放到微信公众号、朋友圈等的页面，需要用到微信的开发者工具。</li>
+</ol>
+<p>以下调试都在Mac上进行，这样iOS的调试也比较方便。</p>
+<h3 id="安卓上的调试"><a href="#安卓上的调试" class="headerlink" title="安卓上的调试"></a>安卓上的调试</h3><p>安卓上手机上装一个chrome浏览器，插上USB与电脑连接。</p>
+<p>一般接上USB之后，有的手机会弹出来是否允许USB调试，选择是就好。</p>
+<p>几种不同的安卓系统开启方法见转载：</p>
+<p>● Android 3.2+，打开设置 – 应用程序 – 开发，在“USB调试”处打钩选上</p>
+<p>● Android 4.0~ Android 4.1 ，打开设置-开发者选项-进入在“USB调试”处打钩选上。</p>
+<p>● Android 4.2+，打开设置-关于手机-手机配置信息-连点“版本号”7次，返回上层就可以看到“开发者选项”显示出来了，在“USB调试”处打钩选上。（小米手机很多是这样的）</p>
+<p>之后在电脑上开启Chrome浏览器，直接在地址栏输入: </p>
+<p>chrome://inspect/#devices</p>
+<p>在device一栏记得勾选USB device 和 network target。连接成功，就可以看到下图这样的列表，点击进去就到了调试界面。</p>
+<p><img src="/img/移动Web开发之远程真机调试（1）/1.png" alt="43"></p>
+<h3 id="iOS的调试"><a href="#iOS的调试" class="headerlink" title="iOS的调试"></a>iOS的调试</h3><p>对于iPhone的调试，直接按照以下步骤，相信很快就可以解决各种疑难杂症的bug了。</p>
+<ol>
+<li><p>拿起iPhone，找到设置&gt;safari&gt;高级,打开Web检查器。</p>
+</li>
+<li><p>打开Mac，进入safari的设置，打开safari&gt;偏好设置&gt;高级，勾选在在菜单栏中显示开发菜单。</p>
+</li>
+<li><p>插入USB，在safari的开发菜单中找到自己的设备和对应需要调试的页面即可。如下：</p>
+</li>
+</ol>
+<p><img src="/img/移动Web开发之远程真机调试（1）/2.png" alt="43"></p>
+<p>进入调试界面，如下：</p>
+<p><img src="/img/移动Web开发之远程真机调试（1）/3.png" alt="43"></p>
+<p>说起来，safari上调试页面总归没有chrome上感觉顺手，效率很低。 在下一篇中，会详细介绍通过chrome调试iOS系统的Web页面的方法。</p>
+<h3 id="微信开发者工具的调试"><a href="#微信开发者工具的调试" class="headerlink" title="微信开发者工具的调试"></a>微信开发者工具的调试</h3><p>开发微信公众号的Html5页面，或者是微信小程序，在微信环境也会出现问题。要仔细的排查，要用到微信开发者工具进行模拟。 一般遇到需要在开发者工具调试的情况是：</p>
+<ol>
+<li>用到页面分享、调起拍照、音视频接口等功能时，需要微信环境的支持，调用微信端的JS SDK中的接口。</li>
+<li>小程序就更不用说，需要利用这个工具进行开发。</li>
+</ol>
+<p>扫描进入调试工具，选择开发类型：</p>
+<p><img src="/img/移动Web开发之远程真机调试（1）/4.png" alt="43"></p>
+<h4 id="公众号开发"><a href="#公众号开发" class="headerlink" title="公众号开发"></a>公众号开发</h4><p>地址栏输入需要调试的页面，打开如下：</p>
+<p><img src="/img/移动Web开发之远程真机调试（1）/5.png" alt="43"><br>比如，很久之前需要做活动页面，一般都要获取用户的appid等相关微信的信息做关联，要在微信中拿到回传的用户code码，有时候在手机上看不出是哪里出了问题，回传过来的redirect_url真是长长一大串啊，在这里看的一清而出，非常方便。 再比如，有时候页面在微信里会出现一些兼容问题，把地址复制出来放到开发者工具的地址栏，试试带的这些字段是咋回事。像这种，来自朋友圈或者聊天对话都做了标记，</p>
+<p>域名+?from=timeline&amp;isappinstalled=0#inviteFriends/inviteFriends/invite， 自己也可以带上去看看什么情况。</p>
+<p>不过不管怎么说，毕竟不如chrome好用。</p>
+<h4 id="小程序开发"><a href="#小程序开发" class="headerlink" title="小程序开发"></a>小程序开发</h4><p>小程序开发比较麻烦一点，首先，项目信息要配置好。 开发时要关联相应的App ID，最终上线要经过审核，一般也要四五天以上。 在这之前，小程序在手机上的真机效果可以在微信的小程序入口中，打开体验版即可。查看体验版要添加权限，有人数限制。上面一串英文名的就是：  </p>
+<p><img src="/img/移动Web开发之远程真机调试（1）/6.png" alt="43"></p>
+<p>开发工具有项目配置、编辑、调试三个模块。 首先看看项目配置：</p>
+<p><img src="/img/移动Web开发之远程真机调试（1）/7.png" alt="40"></p>
+<p>编辑模块，可以直接修改本地代码，修改的结果在调试模块会显示。 不太好用，直接使用本地编辑器更好。</p>
+<p>调试模块如下：</p>
+<p><img src="/img/移动Web开发之远程真机调试（1）/8.png" alt="43"></p>
+<p>比较常用的是对应chrome的Elements的Wxml，可以直接看到css效果。 但是不好用，没法像chrome一样直接把整个元素的css属性复制出来， 没有安装新版本，不知后来有么有改善。在这里找到它：</p>
+<p><img src="/img/移动Web开发之远程真机调试（1）/9.png" alt="43"></p>
+<p>小程序这里写的不是很详细，深度的之后再发文。 </p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2017/03/27/移动Web开发之远程调试（1）/" data-title="April" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/03/10/鼠标左键弹出菜单的实现/"  title="JS事件小练习-鼠标左键（右键）弹出菜单">
+ <strong>NEXT:</strong><br/> 
+ <span>JS事件小练习-鼠标左键（右键）弹出菜单
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#远程调试的三种情况"><span class="toc-number">1.</span> <span class="toc-text">远程调试的三种情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安卓上的调试"><span class="toc-number">2.</span> <span class="toc-text">安卓上的调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iOS的调试"><span class="toc-number">3.</span> <span class="toc-text">iOS的调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#微信开发者工具的调试"><span class="toc-number">4.</span> <span class="toc-text">微信开发者工具的调试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#公众号开发"><span class="toc-number">4.1.</span> <span class="toc-text">公众号开发</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#小程序开发"><span class="toc-number">4.2.</span> <span class="toc-text">小程序开发</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/事件-冒泡/" title="事件 冒泡">事件 冒泡<sup>1</sup></a></li>
+		
+			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
+		
+			<li><a href="/tags/柯里化/" title="柯里化">柯里化<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2017 
+		
+		<a href="http://yoursite.com" target="_blank" title="April Ji">April Ji</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>

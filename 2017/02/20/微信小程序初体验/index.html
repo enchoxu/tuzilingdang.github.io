@@ -1,0 +1,368 @@
+
+ <!DOCTYPE HTML>
+<html lang="中文">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>微信小程序初体验 | April&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="April Ji">
+    
+    <meta name="description" content="年前接到任务要开发一款基金小程序的DEMO，虽然微信小程序热度持续挺久了，也正式上线了很多应用。但之前并没有详细的做过技术调研，所以有这样一个比较集中的时间做开发真的是很乐在其中，对于学习小程序是个很好的机会。然而写博客时才发现，开发的时候根据文档把Demo做出来，真的要写肚子里却没有墨水。究其原因">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/april.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/april.jpg" alt="April&#39;s Blog" title="April&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
+				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/resume">about me</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/02/20/微信小程序初体验/" title="微信小程序初体验" itemprop="url">微信小程序初体验</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="April Ji">April Ji</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-02-20T10:32:22.000Z" itemprop="datePublished">2017-02-20</time>
+    Updated:<time datetime="2017-05-30T14:23:59.000Z" itemprop="dateModified">2017-05-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发计划"><span class="toc-number">1.</span> <span class="toc-text">项目开发计划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发计划-1"><span class="toc-number">2.</span> <span class="toc-text">项目开发计划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#技术总结"><span class="toc-number">3.</span> <span class="toc-text">技术总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-小程序的实质"><span class="toc-number">3.1.</span> <span class="toc-text">1. 小程序的实质</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-小程序的运行环境"><span class="toc-number">3.2.</span> <span class="toc-text">2. 小程序的运行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-小程序的架构"><span class="toc-number">3.3.</span> <span class="toc-text">3. 小程序的架构</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#View与Service的通信"><span class="toc-number">3.3.0.1.</span> <span class="toc-text">View与Service的通信</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-本地缓存"><span class="toc-number">3.4.</span> <span class="toc-text">4. 本地缓存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-开发工具的实现"><span class="toc-number">3.5.</span> <span class="toc-text">5. 开发工具的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-成果截图"><span class="toc-number">3.6.</span> <span class="toc-text">6. 成果截图</span></a></li></ol></li></ol>
+		</div>
+		
+		<p>年前接到任务要开发一款基金小程序的DEMO，虽然微信小程序热度持续挺久了，也正式上线了很多应用。但之前并没有详细的做过技术调研，所以有这样一个比较集中的时间做开发真的是很乐在其中，对于学习小程序是个很好的机会。然而写博客时才发现，开发的时候根据文档把Demo做出来，真的要写肚子里却没有墨水。究其原因，学习太肤浅了……所以趁着还没忘，抓紧做一下总结。<br>基本的开发方法微信小程序文档已经说明的很详细了，有兴趣动手实践的同学可直接参考文档。本文将围绕本次项目的实践经验和整体开发流程，谈谈一些更深入的知识。</p>
+<h3 id="项目开发计划"><a href="#项目开发计划" class="headerlink" title="项目开发计划"></a>项目开发计划</h3><p>作为一篇技术博文，写到到这里画风有点不对，但是还是非常有必要聊一下小程序的适用场景，毕竟产品定位如果一开始方向错误，会直接导致开发人员辛辛苦苦大半年，一夜回到解放前。<br>开发一款新技术的产品，对于一个团队而言，产品上的适用性、技术人员学习及开发成本等等都是必须在项目开发之前，需要仔细斟酌讨论的事情。微信小程序到底是什么大家已经很熟悉了，但到底什么类型什么业务的产品是适合做成小程序的，这就要认真的思考一下了。看下大家对小程序的评价：<br>低频App没有合理存在的理由。<br>这是一种从C/S结构，到B/S结构的转变。就像分久必合，合久必分，两者都会长期存在。<br>很多东西实际上一个单页程序就够了。<br>基于微信那么大的用户群体，所有的App基本都需要通过它来推广，现在让传播变的更方便了。</p>
+<p>根据基金的业务特征，对于货基及面向很多白领用户的基金产品而言：<br>APP用户量少，使用场景偏于低频，但真正的老用户可能会选择使用APP购买基金。<br>H5的入口为公众号，更强的是信息推送能力，而在真正购买产品上可能不适用。<br>看起来其实业务场景非常适合用小程序来实现。但不幸的是，证监会目前对此管控非常严格，为保证金融系统的稳定安全，现涉及交易的基金小程序都被下架。至于如何在小程序上发力推广基金产品，以及产品以何种形式出现，还是有待商讨的一件事情。<br>目前美团生活、美团酒店、携程、今日头条、滴滴打车等等都已经推出了小程序产品。个人觉得比较容易传播、有线下服务升级的产品比较适于做成小程序，毕竟入口是在微信平台环境上的，要符合微信的生态规则才能玩得转。</p>
+<h3 id="项目开发计划-1"><a href="#项目开发计划-1" class="headerlink" title="项目开发计划"></a>项目开发计划</h3><p>正文开始啦。<br>对于一个从来从来没有接触过小程序的开发人员来说，开发前有许多准备工作需要列入计划中。这些工作包括小程序账号注册、信息完善、AppId配置、微信开发者工具的使用、手机端预览、代码审核发布等。<br>以上准备工作不多说了，可以直接参考小程序开发文档。下图是这次DEMO的项目开发计划： </p>
+<p><img src="/img/微信小程序初体验/1.png" alt="43"></p>
+<h3 id="技术总结"><a href="#技术总结" class="headerlink" title="技术总结"></a>技术总结</h3><h4 id="1-小程序的实质"><a href="#1-小程序的实质" class="headerlink" title="1. 小程序的实质"></a>1. 小程序的实质</h4><ul>
+<li>不要这么不专业，请叫HTML5。 当然，小程序和HTML5没啥关系。HTML5 是 HTML、XHTML 以及 HTML DOM 的新标准。而小程序用的标签语言是WeiXin Markup Language，简称WXML。说起来区别就大了，首先标签的写法就完全不同，然后运行环境不同，导致了开发成本不同、获取系统级权限不同、页面渲染不同、调用原生接口的能力不同……</li>
+<li>等等，我还是看文章吧。<br>可以参考知乎的这幅图，简单的看下小程序的结构：</li>
+</ul>
+<p><img src="/img/微信小程序初体验/14.png" alt="43"></p>
+<p>整体框架主要看逻辑层，视图层。更具体的目录结构、WXML、WXSS这些文档有的就不说了。<br>有前端基础的同学开发小程序上手比较快，但小程序实质上开发起来有以完全不同的地方：<br>DOM和BOM的使用<br>通常意义上来讲，JavaScript = ECMAScript+ DOM+BOM。是因为我们的JS代码在浏览器有个js引擎来运行我们的代码。在浏览器中需要用到DOM（文档对象模型）作为HTML和XML的API来描绘有层次的节点树。这样开发人员可以通过这个API对页面的节点进行添加、移除，修改。然后BOM（浏览器对象模型）提供了很多对象用于访问浏览器。<br>然鹅小程序运行在微信端，也就是说我们正常开发前端页面DOM和BOM不能使用了。 一般BOM的window对象往往扮演ECMASCript的Global对象的角色，全局作用域的的所有变量、函数都会变成它的属性和方法。这些在小程序中都不能使用了。<br>HTML标签、CSS<br>小程序中采用了WXML、WXSS两个不同的规范，WXML的写法完全不同，WXSS差不多。<br>换了一套东西代表着，原来的项目代码完全不能移植，所有都要重新开发。<br>访问微信原生API的能力<br>开发过微信公众号等前端页面的同学都知道，普通前端页面调用微信的原声API是需要引入它的JSSDK文件的，其他人不知道，我自己就遇过很多让人头疼的坑。<br>小程序自然在访问原生API的能力上强太多。获取用户信息、调起支付功能无障碍。<br>兼容性<br>说起移动端的前端开发，兼容性真是头疼的问题啊。安卓、iOS系统的不同、各种浏览器的不同都需要考虑。相比这些，小程序就不用考虑太多了。</p>
+<h4 id="2-小程序的运行环境"><a href="#2-小程序的运行环境" class="headerlink" title="2. 小程序的运行环境"></a>2. 小程序的运行环境</h4><p>之前没有注意思考，被问到时，一时语塞……小程序在不同系统中运行环境有什么不一样，发现文档中有一点自己都没注意到。深入看起来，小程序运行有三端： iOS、Android、微信调试工具。代码怎么在三端跑起来，这就要看看这三端JS代码是如何运行的了。<br>了解APP开发的同学会知道，APP有webview层来显示Web页面，这个webview其实就类似浏览器，只是集成到了APP中。了解Web前端开发的同学会知道，简单讲浏览器 = 内核 + shell， Web页面的显示主要靠浏览器内核，而浏览器内核主要有两部分构成：渲染引擎和JS引擎。所以小程序Wxss的JS代码的渲染和解析要依赖于微信APP中的webview内核，就要看看它在不同系统中究竟有什么不同，下面就是答案了。</p>
+<p>运行有三端： iOS、Android、微信调试工具</p>
+<ol>
+<li><p>iOS中，js代码运行在JSCore中，WKWebView渲染。在iOS8之后基本用WKWebview替代了UIWebview，它和safari的引擎是一样的。</p>
+</li>
+<li><p>安卓中，js代码运行在X5 JScore中，基于 Mobile Chrome 37 渲染，估计跟QQ浏览器用的一样。</p>
+</li>
+<li><p>调试工具中，运行在 nwjs 中，由 Chrome Webview 来渲。</p>
+</li>
+</ol>
+<h4 id="3-小程序的架构"><a href="#3-小程序的架构" class="headerlink" title="3. 小程序的架构"></a>3. 小程序的架构</h4><p>接下来讲讲更深入一点文档中找不到的知识。从上面一小节知道，小程序主要有逻辑层和视图层。从整个底层框架看，本质上跟facebook的开发架构RN比较像，但微信团队在底层做了重构，整体上采用了一套全新的技术规范和架构。这里采用了组件化的思想，每个页面作为一个page，里面可以嵌入需要用到的各种组件。Page的整体设计上编程风格很像vue.js、angularJS，总起来讲，有这些框架开发经验的同学可以很快上手。而在写XML时，用到了类似前端常用的模板引擎的写法做数据绑定、列表渲染和条件渲染。当然，也可以使用<template></template>标签作为模板，将其嵌套到WXML中。<br>所以表面上看我们在写WXSS、WXML，各种page页面，与之前好像有很大不同。本质上学好基础JavaScript，深入了解React、Vue等框架才是王道。<br>视图层位于native端，渲染页面结构，WebView进行渲染；逻辑层处理逻辑、数据、接口，JSCore运行（这里要说明的是，JSCore是没有窗口对象的，所有BOM对象不能调用，也就是说，各种jquery，zepto等等都不能用了）。两个运行在不同的线程中。</p>
+<h6 id="View与Service的通信"><a href="#View与Service的通信" class="headerlink" title="View与Service的通信"></a>View与Service的通信</h6><p>视图层和逻辑层有一个桥梁去链接，在这里是系统层的JSBridge。如果是在APP端，JavaScript代码跑在JSCore中，开发工具中跑在nwjs中。</p>
+<p><img src="/img/微信小程序初体验/0.png" alt="43"></p>
+<p>以开发工具为例，可以看看WeixinJSBridge放在哪里。有Mac电脑的话，直接查看包内容。Service中路径为/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/app/dist/weapp/appservice/asdebug.js, View中的不太确定，应该是这里：/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/app/dist/inject/jweixindebug.js。 定义的这两个对象接口格式是完全一样的，不过内部处理就不同了。</p>
+<p>过程大概类似这种：</p>
+<p>有交互事件发生时，View层按照特定格式封装这个时间，然后通过WeixinJSBridge中的方法publish，WeixinJSBridge.publish(‘PAGE_EVENT’, data)发送。然后nwjs或JSCore环境接受，由service模块处理数据，最后交由dist/components/simulator/webviewbody.js封装数据转发给view层。 view中也有个WeixinJSBridge对象，接收这个数据。最后通过虚拟dom改变dom节点。</p>
+<h4 id="4-本地缓存"><a href="#4-本地缓存" class="headerlink" title="4. 本地缓存"></a>4. 本地缓存</h4><p>听说微信给每个小程序提供了10M的本地缓存。它的数据缓存实际跟H5的localstorage差不多。</p>
+<p>比如，由一个页面跳转另一个页面时：<br>原页面的js是这样的：</p>
+<pre><code> storeData:function(e){
+    wx.setStorageSync(&apos;storageKey&apos;, this.data);
+}
+</code></pre><p>跳转到的页面可以直接这样取数据：</p>
+<p>WXTML:</p>
+<pre><code>&lt;view&gt;缓存的数据:{{storageKey}}&lt;/view&gt;
+</code></pre><p>JS:</p>
+<pre><code>getData:function(){
+    try {
+          var value = wx.getStorageSync(&apos;storageKey&apos;);
+        if (value) {
+              //Do something with return value
+        }    
+     } catch (e) {
+        //Do something when catch error
+     }
+}
+</code></pre><h4 id="5-开发工具的实现"><a href="#5-开发工具的实现" class="headerlink" title="5. 开发工具的实现"></a>5. 开发工具的实现</h4><p>开发工具具体是怎么实现的，感觉应该蛮复杂的。看起来是个阉割版的浏览器，但其他的还没研究透，还是记下来这篇博客，有空再看看。</p>
+<p>附IDE的分析博客两篇：</p>
+<p><a href="https://www.phodal.com/blog/weapp-demo-process-webkit-app/?nsukey=cbw1D89rau1XcmwnAo5Ib7iKGpLITR3NJF3q8pSDLOohaBDv%2F3OapTKAk7kl7RZ%2BFPFUcwQE4t2DVsJD3r5tmQ%3D%3D" target="_blank" rel="external">微信小程序「官方示例代码」剖析【下】：运行机制</a></p>
+<p><a href="https://www.phodal.com/blog/how-to-run-weapp-in-browser/" target="_blank" rel="external">微信小程序」剖析（二）：框架原理 | 如何在浏览器上运行</a></p>
+<h4 id="6-成果截图"><a href="#6-成果截图" class="headerlink" title="6. 成果截图"></a>6. 成果截图</h4><p><img src="/img/微信小程序初体验/111.png" alt="100"></p>
+<p><img src="/img/微信小程序初体验/222.png" alt="43"></p>
+<p><img src="/img/微信小程序初体验/333.png" alt="43"></p>
+<p><img src="/img/微信小程序初体验/444.png" alt="43"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/架构-微信小程序/">架构  微信小程序</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2017/02/20/微信小程序初体验/" data-title="微信小程序初体验 | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/02/21/移动Web开发之远程调试（1）/" title="移动Web开发之远程真机、模拟调试（1）">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  移动Web开发之远程真机、模拟调试（1）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/02/17/JavaScript学习心得-面向对象篇-1/"  title="JavaScript学习心得-面向对象篇(1)">
+ <strong>NEXT:</strong><br/> 
+ <span>JavaScript学习心得-面向对象篇(1)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发计划"><span class="toc-number">1.</span> <span class="toc-text">项目开发计划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发计划-1"><span class="toc-number">2.</span> <span class="toc-text">项目开发计划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#技术总结"><span class="toc-number">3.</span> <span class="toc-text">技术总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-小程序的实质"><span class="toc-number">3.1.</span> <span class="toc-text">1. 小程序的实质</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-小程序的运行环境"><span class="toc-number">3.2.</span> <span class="toc-text">2. 小程序的运行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-小程序的架构"><span class="toc-number">3.3.</span> <span class="toc-text">3. 小程序的架构</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#View与Service的通信"><span class="toc-number">3.3.0.1.</span> <span class="toc-text">View与Service的通信</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-本地缓存"><span class="toc-number">3.4.</span> <span class="toc-text">4. 本地缓存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-开发工具的实现"><span class="toc-number">3.5.</span> <span class="toc-text">5. 开发工具的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-成果截图"><span class="toc-number">3.6.</span> <span class="toc-text">6. 成果截图</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
+		
+			<li><a href="/tags/touch事件/" title="touch事件">touch事件<sup>1</sup></a></li>
+		
+			<li><a href="/tags/事件-冒泡/" title="事件 冒泡">事件 冒泡<sup>1</sup></a></li>
+		
+			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
+		
+			<li><a href="/tags/柯里化/" title="柯里化">柯里化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/真机-微信-远程调试/" title="真机 微信 远程调试">真机 微信 远程调试<sup>2</sup></a></li>
+		
+			<li><a href="/tags/脚手架工具/" title="脚手架工具">脚手架工具<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/tuzilingdang for https://github.com/tuzilingdang" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2017 
+		
+		<a href="http://yoursite.com" target="_blank" title="April Ji">April Ji</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,329 @@
+
+ <!DOCTYPE HTML>
+<html lang="中文">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>gulp实现前端非覆盖式发布 | April&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="April Ji">
+    
+    <meta name="description" content="近期参与了公司的重构项目，交付给测试同事做测试时，发现修改了bug测试还是报出来。 然后清理了缓存或者过一段时间就好了。幸好是用于测试，如果在发布版本的过程中，由于浏览器缓存问题导致用户访问页面时访问了原来的旧资源就比较麻烦了。
+之后就搜索了各种资料，看了下大公司的各种方案，看完发现太复杂。对于公司">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/april.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/april.jpg" alt="April&#39;s Blog" title="April&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
+				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/resume">about me</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/02/10/gulp实现前端非覆盖式发布/" title="gulp实现前端非覆盖式发布" itemprop="url">gulp实现前端非覆盖式发布</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="April Ji">April Ji</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-02-10T08:37:02.000Z" itemprop="datePublished">2017-02-10</time>
+    Updated:<time datetime="2017-05-30T13:11:12.000Z" itemprop="dateModified">2017-05-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#覆盖式静态资源发布："><span class="toc-number">1.</span> <span class="toc-text">覆盖式静态资源发布：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非覆盖式静态资源发布："><span class="toc-number">2.</span> <span class="toc-text">非覆盖式静态资源发布：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gulp用到的插件："><span class="toc-number">3.</span> <span class="toc-text">gulp用到的插件：</span></a></li></ol>
+		</div>
+		
+		<p>近期参与了公司的重构项目，交付给测试同事做测试时，发现修改了bug测试还是报出来。 然后清理了缓存或者过一段时间就好了。幸好是用于测试，如果在发布版本的过程中，由于浏览器缓存问题导致用户访问页面时访问了原来的旧资源就比较麻烦了。</p>
+<p>之后就搜索了各种资料，看了下大公司的各种方案，看完发现太复杂。对于公司这种不算大的项目，采用gulp就可以解决了。</p>
+<p>在写如下非覆盖式静态资源发布，首先需要了解一下什么是覆盖式静态资源发布。</p>
+<h3 id="覆盖式静态资源发布："><a href="#覆盖式静态资源发布：" class="headerlink" title="覆盖式静态资源发布："></a>覆盖式静态资源发布：</h3><p>从下面页面看到，页面引用了一个base.css的文件，里面引用了一张图片。正常情况下，浏览器使用缓存来防止用户每次访问页面都需要加载大量的静态资源。 这个过程是，浏览器使用协商缓存，在加载同一个资源时，会问服务器有没有更新过这个资源，没有的话就返回一个304状态，然后读取本地静态资源。</p>
+<p><img src="/img/gulp实现前端非覆盖式发布/1.png" alt="43"></p>
+<p>然后，这也造成了另外一个问题，在每次发布新的版本时，已经修改了另外一张图片，但由于缓存用户并没有感知到图片更新。如果避免这种情况发生，我们有一种办法，就是在每次发布版本时，在静态资源的名称上打一个版本号，类似下面这样：</p>
+<pre><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;base.css?v=1.0.1&quot;/&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;a.css?v=1.0.1&quot;/&gt;
+</code></pre><p>棒棒哒，这样就解决了上面头疼的问题。但真的这么快就解决了么，可没有那么容易呀。这样又出现了一个问题，项目比较大的话，那么那么多的资源文件，全部都要更新一遍，就要重新下载一次，这就麻烦了。 如果某个版本的修改内容只有一个文件，那就只更新这个文件好了。那文件后缀要怎么办呢？查找了一下方案，给后面的文件后缀打个戳就好，生成MD5码就OK了。简而言之，就是可以根据不同文件内容生成不同hash。</p>
+<h3 id="非覆盖式静态资源发布："><a href="#非覆盖式静态资源发布：" class="headerlink" title="非覆盖式静态资源发布："></a>非覆盖式静态资源发布：</h3><p>然后文件命名就开心的被改成下面的样子啦。</p>
+<pre><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;base.css?v=j9sofj&quot;/&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;a.css?v=d98jfk&quot;/&gt;
+</code></pre><p>到这里还是没有大功告成，因为有一个问题，如果html页面和静态资源不是同一打包发布的话，又来了一个问题。 先发布页面还是静态资源呢？先发布页面，静态资源还没有更新，那用户就找不到新的资源，要报错啦^^^先发布静态资源，再发布页面，原来的文件被新的覆盖掉了，又混乱了。然后程序猿和程序媛们又要愉快的在夜深人静的时候上新的版本啦。</p>
+<p>不过，还好我们没有大公司那么健全，每次发版全部打包丢上去。直接一起改掉就好了，然而，我是个追求完美的人嘿嘿。继续看资料，那就不要把后缀加上戳了，直接在文件名上修改吧。然后就变成了下图最后的样子。</p>
+<p><img src="/img/gulp实现前端非覆盖式发布/2.png" alt="43"></p>
+<p>这样每次修改了文件，不会覆盖掉原来的，两个都保留了。 而且还有一个好处，跟据内容生产的MD5戳，加上一段内容，新的文件是这样子的：base-3fead09019.css， 恢复到原来，变成了这样子：base-5jdkg08679.css。 重新加上刚刚的内容，变成这样子：base-3fead09019.css，删掉内容，又变回这样子：base-5jdkg08679.css。 非常好，跟据内容生成的戳，相同的文件不会产生命名的变化，就不会产生过多各种戳的文件了。看起来，现在比较完美的解决了用户浏览器缓存更新的问题。</p>
+<h3 id="gulp用到的插件："><a href="#gulp用到的插件：" class="headerlink" title="gulp用到的插件："></a>gulp用到的插件：</h3><p>最后整理了一下，gulp用到的插件，看看gulpfile.js: 晕乎乎，实在太多了，其实相关的就是 gulp-rev和gulp-rev-collector。</p>
+<p><img src="/img/gulp实现前端非覆盖式发布/3.png" alt="43"></p>
+<p>原本也尝试了很多其他的插件，就这俩最合适了。 正常gulp-rev就可以，但项目里有各种文件引用了其他的静态资源文件，手动改要累坏，所以每次有文件更新了名称之后，需要用到gulp-rev-collector把引用的路径直接替换掉。<br>这样整体上看，问题就解决了。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2017/02/10/gulp实现前端非覆盖式发布/" data-title="gulp实现前端非覆盖式发布 | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/02/17/JavaScript学习心得-面向对象篇-1/" title="JavaScript学习心得-面向对象篇(1)">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  JavaScript学习心得-面向对象篇(1)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/01/08/Ruby的安装/"  title="Ruby的安装">
+ <strong>NEXT:</strong><br/> 
+ <span>Ruby的安装
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#覆盖式静态资源发布："><span class="toc-number">1.</span> <span class="toc-text">覆盖式静态资源发布：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非覆盖式静态资源发布："><span class="toc-number">2.</span> <span class="toc-text">非覆盖式静态资源发布：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gulp用到的插件："><span class="toc-number">3.</span> <span class="toc-text">gulp用到的插件：</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
+		
+			<li><a href="/tags/touch事件/" title="touch事件">touch事件<sup>1</sup></a></li>
+		
+			<li><a href="/tags/事件-冒泡/" title="事件 冒泡">事件 冒泡<sup>1</sup></a></li>
+		
+			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
+		
+			<li><a href="/tags/柯里化/" title="柯里化">柯里化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/真机-微信-远程调试/" title="真机 微信 远程调试">真机 微信 远程调试<sup>2</sup></a></li>
+		
+			<li><a href="/tags/脚手架工具/" title="脚手架工具">脚手架工具<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/tuzilingdang for https://github.com/tuzilingdang" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2017 
+		
+		<a href="http://yoursite.com" target="_blank" title="April Ji">April Ji</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
