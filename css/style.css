@@ -1001,7 +1001,7 @@ article .article-content p {
 article .article-content img,
 article .article-content video,
 article .article-content figure img {
-  max-width: 50%;
+  max-width: 70%;
   display: block;
   margin: auto;
   height: auto;
