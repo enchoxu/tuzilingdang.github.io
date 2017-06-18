@@ -76,7 +76,7 @@
     </p>
   <p class="article-time">
     <time datetime="2017-06-18T11:38:40.000Z" itemprop="datePublished">2017-06-18</time>
-    更新日期:<time datetime="2017-06-18T15:16:00.000Z" itemprop="dateModified">2017-06-18</time>
+    更新日期:<time datetime="2017-06-18T16:38:54.000Z" itemprop="dateModified">2017-06-19</time>
     
   </p>
 </header>
@@ -85,7 +85,7 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求描述"><span class="toc-number">1.</span> <span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DEMO及代码"><span class="toc-number">2.</span> <span class="toc-text">DEMO及代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路"><span class="toc-number">3.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具体实现和分析"><span class="toc-number">4.</span> <span class="toc-text">具体实现和分析</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求描述"><span class="toc-number">1.</span> <span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DEMO及代码"><span class="toc-number">2.</span> <span class="toc-text">DEMO及代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路"><span class="toc-number">3.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具体实现和分析"><span class="toc-number">4.</span> <span class="toc-text">具体实现和分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录结构"><span class="toc-number">4.1.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#入口函数"><span class="toc-number">4.2.</span> <span class="toc-text">入口函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五子棋的主要算法"><span class="toc-number">4.3.</span> <span class="toc-text">五子棋的主要算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#方案1"><span class="toc-number">4.3.1.</span> <span class="toc-text">方案1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#方案2"><span class="toc-number">4.3.2.</span> <span class="toc-text">方案2</span></a></li></ol></li></ol></li></ol>
 		</div>
 		
 		<p>以前从来没有写过小游戏，但面试腾讯碰到这样一个笔试题，写一个五子棋小游戏。牺牲了周末旅游的时间写出来了，白花花的银子收不回来了很心疼，即便面试失败了，也当一次学习吧。</p>
@@ -94,8 +94,12 @@
 <li>用canvas和dom两种方案写一个五子棋小游戏，不需要考虑人机对战。</li>
 <li>库和框架等不做要求，随意选择。</li>
 </ul>
-<p>想了半天，决定先实现canvas版。 除了以上两点需求之外，额外应该还要考虑到拓展性，并且在dom和canvas切换时实现的代价最小。</p>
-<h2 id="DEMO及代码"><a href="#DEMO及代码" class="headerlink" title="DEMO及代码"></a>DEMO及代码</h2><p>具体代码可到我的github下载： <a href="https://github.com/tuzilingdang/backgammon-canvas" target="_blank" rel="external">canvas版五子棋</a></p>
+<p>想了半天，决定先实现canvas版。 除了以上两点需求之外，还应该完成如下要求：</p>
+<ul>
+<li>额外应该还要考虑到拓展性，实现棋盘列数、颜色、棋子半径等灵活配置</li>
+<li>在dom和canvas切换时实现的代价最小。</li>
+</ul>
+<h2 id="DEMO及代码"><a href="#DEMO及代码" class="headerlink" title="DEMO及代码"></a>DEMO及代码</h2><p>具体代码可到我的github下载： <a href="https://github.com/tuzilingdang/backgammon-canvas" target="_blank" rel="external"><strong>canvas版五子棋</strong></a></p>
 <p>DEMO地址：<a href="https://tuzilingdang.github.io/backgammon-canvas/" target="_blank" rel="external"><strong>DEMO</strong></a></p>
 <p><img src="/img/Web版五子棋小游戏的实现-Canvas/1.png" alt="canvas实现的五子棋"></p>
 <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
@@ -103,7 +107,156 @@
 <li>棋盘和棋子的绘制使用canvas实现</li>
 <li>组合使用构造函数和原型模式，构造棋盘，棋子和Game的原型</li>
 </ol>
-<h2 id="具体实现和分析"><a href="#具体实现和分析" class="headerlink" title="具体实现和分析"></a>具体实现和分析</h2>  
+<h2 id="具体实现和分析"><a href="#具体实现和分析" class="headerlink" title="具体实现和分析"></a>具体实现和分析</h2><h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><p><img src="/img/Web版五子棋小游戏的实现-Canvas/2.png" alt="目录结构"></p>
+<h3 id="入口函数"><a href="#入口函数" class="headerlink" title="入口函数"></a>入口函数</h3><p>入口函数在app.js中， 因依赖于require实现代码的模块化，需要对require做一个config配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">require.config(&#123;</div><div class="line">    baseUrl: &apos;js/libs&apos;,</div><div class="line">    paths: &#123;</div><div class="line">        app: &apos;../app&apos;,</div><div class="line">        game: &quot;../app/game&quot;,</div><div class="line">        checkerboard: &quot;../app/checkerboard&quot;,</div><div class="line">        piece: &quot;../app/piece&quot;,</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>app主逻辑入口如下：</p>
+<p>首先做好棋盘各属性的配置，还有棋子的半径定义。然后初始化Game。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">require([&quot;jquery&quot;, &quot;game&quot;], function($, Game) &#123;</div><div class="line">    var checkerBoard = &#123;</div><div class="line">        id: &quot;checker-board&quot;,</div><div class="line">        rows: 20, // 棋盘列数</div><div class="line">        margin: 20, // 棋盘边框间距</div><div class="line"></div><div class="line">    &#125;;</div><div class="line">    var piece = &#123;</div><div class="line">        r : 24</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    var game = new Game( checkerBoard, piece );</div><div class="line">    game.init();</div><div class="line"></div><div class="line">    $(&quot;#start&quot;).click(function() &#123;</div><div class="line">        game.init();</div><div class="line">        game.start();</div><div class="line">        $(&quot;#start&quot;).unbind();</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="五子棋的主要算法"><a href="#五子棋的主要算法" class="headerlink" title="五子棋的主要算法"></a>五子棋的主要算法</h3><p>主要算法想过两种方案： </p>
+<h4 id="方案1"><a href="#方案1" class="headerlink" title="方案1"></a>方案1</h4><p>这个方案比较麻烦，如果是三子连胜比较简单的话可以采用。大体思路是： </p>
+<ol>
+<li>设置一个5<em>5的正方形作为检测窗口，窗口从左上角开始，每次以step1格的距离像右移动，移动到最右边，然后以step为1格想下移动。若棋盘矩阵的长宽为n，也就是检测窗口一共移动了n-1 </em> n-1次。</li>
+<li>每次检测窗口移动，都要匹配对应棋盘的棋子状态是否与检测窗口的胜利状态一致。 检测窗口中胜利状态一共有12种，分别如下</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">X</th>
+<th style="text-align:left">X</th>
+<th style="text-align:left">X</th>
+<th style="text-align:left">X</th>
+<th style="text-align:left">X</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+</tbody>
+</table>
+<p>…………………</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">X</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+</tbody>
+</table>
+<p>…………………</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">X</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">X</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>棋盘对应窗口的棋子与以上状态一致，则游戏结束。</li>
+</ol>
+<h4 id="方案2"><a href="#方案2" class="headerlink" title="方案2"></a>方案2</h4><p>目前看起来最快的实现方法：</p>
+<ol>
+<li>每次下一个子，检察一下棋子周边的状态</li>
+<li>分别检测横向、竖向、斜向、反斜向的是否有连子，如果有，则判断颜色，返回胜方及结束状态。</li>
+<li>这里比较容易出错的是边界检测，如果边界检测代码写的有问题，会出现各种在边界点击的报错提示。</li>
+<li>添加了和棋的判断，毕竟有时格子太少，容易出现和棋的状态。</li>
+</ol>
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div></pre></td><td class="code"><pre><div class="line">caculateWinner: function(pos) &#123;</div><div class="line">	var that = this;</div><div class="line">	var player = that.stateMatrix[pos.x][pos.y];</div><div class="line"></div><div class="line">	function checkDrawn() &#123;</div><div class="line">		for (var i = 0; i &lt; that.matrixWidth; i++) &#123;</div><div class="line">			for (var j = 0; j &lt; that.matrixHeight; j++) &#123;</div><div class="line">				if (that.stateMatrix[i][j] === &quot;null&quot;) &#123;</div><div class="line">					return false;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		return true;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	function checkHorizon() &#123;</div><div class="line">		var count = 0;</div><div class="line">		for (var i = 1; i &lt; 5; i++) &#123;</div><div class="line">			if ((pos.x - i) &gt;= 0) &#123;</div><div class="line">				if ((that.stateMatrix[pos.x - i][pos.y] === player)) &#123;</div><div class="line">					count++;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		for (var i = pos.x + 1; i &lt; 5 - count + pos.x; i++) &#123;</div><div class="line">			if (i &gt;= that.matrixWidth ) &#123;</div><div class="line">				return false;</div><div class="line">			&#125; else &#123;</div><div class="line">				if (that.stateMatrix[i][pos.y] !== player) &#123;</div><div class="line">					return false;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		return true;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	function checkVertical() &#123;</div><div class="line">		var count = 0;</div><div class="line">		for (var j = 1; j &lt; 5; j++) &#123;</div><div class="line">			if ((pos.y - j) &gt;= 0) &#123;</div><div class="line">				if ((that.stateMatrix[pos.x][pos.y - j] === player)) &#123;</div><div class="line">					count++;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		for (var j = pos.y + 1; j &lt; 5 - count + pos.y; j++) &#123;</div><div class="line">			if (j &gt;= that.matrixHeight ) &#123;</div><div class="line">				return false;</div><div class="line">			&#125; else &#123;</div><div class="line">				if (that.stateMatrix[pos.x][j] !== player) &#123;</div><div class="line">					return false;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line"></div><div class="line">		&#125;</div><div class="line">		return true;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	function checkDiagonal() &#123;</div><div class="line">		var count = 0;</div><div class="line">		for (var j = 1; j &lt; 5; j++) &#123;</div><div class="line">			if ((pos.y - j) &gt;= 0 &amp;&amp; (pos.x - j) &gt;= 0) &#123;</div><div class="line">				if ((that.stateMatrix[pos.x - j][pos.y - j] === player)) &#123;</div><div class="line">					count++;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		for (var j = 1; j &lt; 5 - count; j++) &#123;</div><div class="line">			if ((j + pos.y &gt;= that.matrixHeight ) || (j + pos.x &gt;= that.matrixHeight )) &#123;</div><div class="line">				return false;</div><div class="line">			&#125; else &#123;</div><div class="line">				if (that.stateMatrix[pos.x + j][pos.y + j] !== player) &#123;</div><div class="line">					return false;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		return true;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	function checkReverseDiagonal() &#123;</div><div class="line">		var count = 0;</div><div class="line">		for (var j = 1; j &lt; 5; j++) &#123;</div><div class="line">			if ((pos.y - j) &gt;= 0 &amp;&amp; (j + pos.x) &lt; that.matrixWidth ) &#123;</div><div class="line">				if ((that.stateMatrix[pos.x + j][pos.y - j] === player)) &#123;</div><div class="line">					count++;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		for (var j = 1; j &lt; 5 - count; j++) &#123;</div><div class="line">			if ( ((j + pos.y) &gt;= that.matrixHeight ) || ((pos.x - j) &lt; 0) )&#123;</div><div class="line">				return false;</div><div class="line">			&#125; else &#123;</div><div class="line">				if (that.stateMatrix[pos.x - j][pos.y + j] !== player) &#123;</div><div class="line">					return false;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		return true;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	if (!checkDrawn()) &#123;</div><div class="line">		if (checkHorizon() || checkVertical() || checkDiagonal() || checkReverseDiagonal()) &#123;</div><div class="line">			return player;</div><div class="line">		&#125; else &#123;</div><div class="line">			return &quot;N&quot;;</div><div class="line">		&#125;</div><div class="line">	&#125; else &#123;</div><div class="line">		return &quot;D&quot;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -143,7 +296,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求描述"><span class="toc-number">1.</span> <span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DEMO及代码"><span class="toc-number">2.</span> <span class="toc-text">DEMO及代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路"><span class="toc-number">3.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具体实现和分析"><span class="toc-number">4.</span> <span class="toc-text">具体实现和分析</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求描述"><span class="toc-number">1.</span> <span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DEMO及代码"><span class="toc-number">2.</span> <span class="toc-text">DEMO及代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路"><span class="toc-number">3.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具体实现和分析"><span class="toc-number">4.</span> <span class="toc-text">具体实现和分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录结构"><span class="toc-number">4.1.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#入口函数"><span class="toc-number">4.2.</span> <span class="toc-text">入口函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五子棋的主要算法"><span class="toc-number">4.3.</span> <span class="toc-text">五子棋的主要算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#方案1"><span class="toc-number">4.3.1.</span> <span class="toc-text">方案1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#方案2"><span class="toc-number">4.3.2.</span> <span class="toc-text">方案2</span></a></li></ol></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
