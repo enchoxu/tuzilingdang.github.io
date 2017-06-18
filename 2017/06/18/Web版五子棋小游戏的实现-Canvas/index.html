@@ -4,10 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>JavaScript学习心得-面向对象篇(1) | April&#39;s Blog</title>
+    <title>Web版五子棋小游戏的实现-Canvas | April&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="April Ji">
+    
+    <meta name="description" content="以前从来没有写过小游戏，但面试腾讯碰到这样一个笔试题，写一个五子棋小游戏。牺牲了周末旅游的时间写出来了，白花花的银子收不回来了很心疼，即便面试失败了，也当一次学习吧。
+内心独白： #……¥%¥&amp;amp;#V@…………¥#。 此处省略1000字，错过一次机会很难过，但实力不够，还是要拿出决心静心修炼才">
     
     
     
@@ -65,15 +68,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/02/17/JavaScript学习心得-面向对象篇-1/" title="JavaScript学习心得-面向对象篇(1)" itemprop="url">JavaScript学习心得-面向对象篇(1)</a>
+      <a href="/2017/06/18/Web版五子棋小游戏的实现-Canvas/" title="Web版五子棋小游戏的实现-Canvas" itemprop="url">Web版五子棋小游戏的实现-Canvas</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="April Ji">April Ji</a>
     </p>
   <p class="article-time">
-    <time datetime="2017-02-17T03:07:22.000Z" itemprop="datePublished">2017-02-17</time>
-    更新日期:<time datetime="2017-05-30T13:11:12.000Z" itemprop="dateModified">2017-05-30</time>
+    <time datetime="2017-06-18T11:38:40.000Z" itemprop="datePublished">2017-06-18</time>
+    更新日期:<time datetime="2017-06-18T15:16:00.000Z" itemprop="dateModified">2017-06-18</time>
     
   </p>
 </header>
@@ -82,16 +85,31 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求描述"><span class="toc-number">1.</span> <span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DEMO及代码"><span class="toc-number">2.</span> <span class="toc-text">DEMO及代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路"><span class="toc-number">3.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具体实现和分析"><span class="toc-number">4.</span> <span class="toc-text">具体实现和分析</span></a></li></ol>
 		</div>
 		
-		  
+		<p>以前从来没有写过小游戏，但面试腾讯碰到这样一个笔试题，写一个五子棋小游戏。牺牲了周末旅游的时间写出来了，白花花的银子收不回来了很心疼，即便面试失败了，也当一次学习吧。</p>
+<p>内心独白： #……¥%¥&amp;#V@…………¥#。 此处省略1000字，错过一次机会很难过，但实力不够，还是要拿出决心静心修炼才是。</p>
+<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><ul>
+<li>用canvas和dom两种方案写一个五子棋小游戏，不需要考虑人机对战。</li>
+<li>库和框架等不做要求，随意选择。</li>
+</ul>
+<p>想了半天，决定先实现canvas版。 除了以上两点需求之外，额外应该还要考虑到拓展性，并且在dom和canvas切换时实现的代价最小。</p>
+<h2 id="DEMO及代码"><a href="#DEMO及代码" class="headerlink" title="DEMO及代码"></a>DEMO及代码</h2><p>具体代码可到我的github下载： <a href="https://github.com/tuzilingdang/backgammon-canvas" target="_blank" rel="external">canvas版五子棋</a></p>
+<p>DEMO地址：<a href="https://tuzilingdang.github.io/backgammon-canvas/" target="_blank" rel="external"><strong>DEMO</strong></a></p>
+<p><img src="/img/Web版五子棋小游戏的实现-Canvas/1.png" alt="canvas实现的五子棋"></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>使用require.js实现模块化，整体代码比较简单，使用原生js或jquery即可</li>
+<li>棋盘和棋子的绘制使用canvas实现</li>
+<li>组合使用构造函数和原型模式，构造棋盘，棋子和Game的原型</li>
+</ol>
+<h2 id="具体实现和分析"><a href="#具体实现和分析" class="headerlink" title="具体实现和分析"></a>具体实现和分析</h2>  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/对象-继承/">对象 继承</a>
+  <span></span> <a href="/tags/canvas-五子棋/">canvas 五子棋</a>
   </div>
 
 
@@ -99,7 +117,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2017/02/17/JavaScript学习心得-面向对象篇-1/" data-title="JavaScript学习心得-面向对象篇(1) | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2017/06/18/Web版五子棋小游戏的实现-Canvas/" data-title="Web版五子棋小游戏的实现-Canvas | April&#39;s Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -108,19 +126,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/02/20/微信小程序初体验/" title="微信小程序初体验">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  微信小程序初体验</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/02/10/gulp实现前端非覆盖式发布/"  title="gulp实现前端非覆盖式发布">
+<a href="/2017/04/22/关于Http Cookie的跨域问题/"  title="关于Http Cookie的跨域问题">
  <strong>NEXT:</strong><br/> 
- <span>gulp实现前端非覆盖式发布
+ <span>关于Http Cookie的跨域问题
 </span>
 </a>
 </div>
@@ -133,7 +143,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求描述"><span class="toc-number">1.</span> <span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DEMO及代码"><span class="toc-number">2.</span> <span class="toc-text">DEMO及代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路"><span class="toc-number">3.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具体实现和分析"><span class="toc-number">4.</span> <span class="toc-text">具体实现和分析</span></a></li></ol>
   </div>
 
 <div id="asidepart">
