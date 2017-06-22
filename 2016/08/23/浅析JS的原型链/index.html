@@ -23,6 +23,8 @@
     
     <link rel="apple-touch-icon" href="/img/april.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    <link rel="stylesheet" href="/css/desert.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/prettify.css" media="screen" type="text/css">
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -47,8 +49,6 @@
 						<li><a href="/">Home</a></li>
 					
 						<li><a href="/archives">Archives</a></li>
-					
-						<li><a href="/resume">about me</a></li>
 					
 					<li>
 					
@@ -98,19 +98,19 @@
 <p>看完英文版定义大概可以知道原型链可以用来做什么了。当两个对象大部分属性都相同，只有一小部分不一致的时候，好的设计是我们更希望减少在每个对象中重复使用一样的功能。在像Java这些语言中，可以基于类的继承来实现。但是EMAScript中并没有类的定义，要实现类似的功能，就需要用到原型链了，也就是说，EMAScript中是基于原型的继承。</p>
 <h3 id="浅析原型链"><a href="#浅析原型链" class="headerlink" title="浅析原型链"></a>浅析原型链</h3><p>直接上几行代码看一下：</p>
 <pre><code>var animal = {
-    move: &apos;run&apos;,
+    move: &#39;run&#39;,
     runningSpeed: function(){
-        return this.move + &apos; &apos;+ this.speed;
+        return this.move + &#39; &#39;+ this.speed;
     } 
 };
 
 var tortoise = {
-    speed: &apos;slow&apos;,
+    speed: &#39;slow&#39;,
     __proto__: animal
 };
 
 var rabbit = {
-    speed: &apos;fast&apos;,
+    speed: &#39;fast&#39;,
     __proto__: animal
 };
 
@@ -123,14 +123,14 @@ console.log(rabbit.runningSpeed());    //run fast
 <p>图1        prototype chain</p>
 <h3 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h3><p>在js引擎执行时，所有存在的对象可以构成一棵原型树，根节点为Object.prototype。所以，写一个函数实现原型链的遍历的话，获取对象上面所有的原型应该怎么写呢？</p>
 <p>答案在下面:</p>
-<pre><code>function getPrototypeChain(obj) {
-    var chain = [];
-    while(obj = obj.__proto__){
-        chain.push(obj);
+<pre><code>    function getPrototypeChain(obj) {
+        var chain = [];
+        while(obj = obj.__proto__){
+            chain.push(obj);
+        }
+        chain.push(null);
+        return chain;
     }
-    chain.push(null);
-    return chain;
-}
 </code></pre>  
 	</div>
 		<footer class="article-footer clearfix">
@@ -235,6 +235,16 @@ console.log(rabbit.runningSpeed());    //run fast
 		<a href="http://yoursite.com" target="_blank" title="April Ji">April Ji</a>
 		
 		</p>
+
+	<script src="/js/jquery-2.1.0.min.js"></script>
+	<script src="/js/prettify.js"></script>
+	<script type="text/javascript">
+	$(window).load(function(){
+	$('pre').addClass('prettyprint linenums').attr('style', 'overflow:scroll;');
+	 $('pre').addClass('prettyprint linenums');
+	   prettyPrint();
+	 })
+	</script>
 </div>
 </footer>
     <script src="/js/jquery-2.1.0.min.js"></script>

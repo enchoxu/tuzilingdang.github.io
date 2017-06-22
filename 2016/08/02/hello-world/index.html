@@ -11,7 +11,7 @@
     
     <meta name="description" content="Hello Hexo折腾了好久，博客终于可以无障碍使用了。直接上步骤：
 配置环境node是必须的安装homebrew，有ruby的话这样：
-1$ ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/mast">
+$ ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/">
     
     
     
@@ -22,6 +22,8 @@
     
     <link rel="apple-touch-icon" href="/img/april.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    <link rel="stylesheet" href="/css/desert.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/prettify.css" media="screen" type="text/css">
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -46,8 +48,6 @@
 						<li><a href="/">Home</a></li>
 					
 						<li><a href="/archives">Archives</a></li>
-					
-						<li><a href="/resume">about me</a></li>
 					
 					<li>
 					
@@ -91,35 +91,52 @@
 		
 		<h2 id="Hello-Hexo"><a href="#Hello-Hexo" class="headerlink" title="Hello Hexo"></a>Hello Hexo</h2><p>折腾了好久，博客终于可以无障碍使用了。直接上步骤：</p>
 <h2 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h2><h3 id="node是必须的"><a href="#node是必须的" class="headerlink" title="node是必须的"></a>node是必须的</h3><p>安装homebrew，有ruby的话这样：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">$ ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;
+</code></pre>
 <p>安装node：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">brew link node</div><div class="line">brew uninstall node</div><div class="line">brew install node</div></pre></td></tr></table></figure>
-<h3 id="Github是必须的"><a href="#Github是必须的" class="headerlink" title="Github是必须的"></a>Github是必须的</h3><p>没有注册下，创建博客的远程库</p>
+<pre><code>brew link node
+brew uninstall node
+brew install node
+</code></pre><h3 id="Github是必须的"><a href="#Github是必须的" class="headerlink" title="Github是必须的"></a>Github是必须的</h3><p>没有注册下，创建博客的远程库</p>
 <h5 id="1-建立Repository"><a href="#1-建立Repository" class="headerlink" title="1. 建立Repository"></a>1. 建立Repository</h5><p>建立与用户名对应的仓库，仓库名必须为【username.github.io】，务必严格一致，务必一致，一致</p>
 <p>本地Blog我的地址是： /Documents/Blog ,里面是这样的文件夹：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">_config.yml    node_modules    public      source</div><div class="line"></div><div class="line">db.json        package.json    scaffolds  themes</div></pre></td></tr></table></figure>
-<p>修改_config.yml文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim _config.yml</div></pre></td></tr></table></figure>
+<pre><code>_config.yml    node_modules    public      source
+
+db.json        package.json    scaffolds  themes
+</code></pre><p>修改_config.yml文件：</p>
+<pre><code class="bash">vim _config.yml
+</code></pre>
 <p>类似这样，务必冒号后面跟个空格，务必冒号后面跟个空格，务必冒号后面跟个空格：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">deploy:</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">type: git</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo: https://github.com/tuzilingdang/tuzilingdang.github.io.git</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">branch: master</div></pre></td></tr></table></figure>
-<p>执行命令(cnpm是淘宝的镜像，没有装就写npm)，每次修改了_config.yml都要这样一下呀，不然不能生效：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cnpm install hexo-deployer-git --save</div></pre></td></tr></table></figure>
+<pre><code>deploy:
+</code></pre><pre><code>type: git
+</code></pre><pre><code>repo: https://github.com/tuzilingdang/tuzilingdang.github.io.git
+</code></pre><pre><code>branch: master
+</code></pre><p>执行命令(cnpm是淘宝的镜像，没有装就写npm)，每次修改了_config.yml都要这样一下呀，不然不能生效：</p>
+<pre><code class="bash">$ cnpm install hexo-deployer-git --save
+</code></pre>
 <h3 id="hexo是必须的"><a href="#hexo是必须的" class="headerlink" title="hexo是必须的"></a>hexo是必须的</h3><p>执行如下命令安装Hexo：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ sudo npm install -g hexo</div><div class="line">``` </div><div class="line"></div><div class="line">初始化命令，然后B<span class="built_in">log</span>下面就有Hexo的文件夹了：</div><div class="line"></div><div class="line">``` bash</div><div class="line">$ hexo init</div></pre></td></tr></table></figure>
+<pre><code class="bash">$ sudo npm install -g hexo
+</code></pre>
+<p>初始化命令，然后Blog下面就有Hexo的文件夹了：</p>
+<pre><code class="bash">$ hexo init
+</code></pre>
 <p>使用下面的命令把你编辑的各种东西生成到public文件夹下，这样部署到github上的博客就是生成的public文件夹，简写的话就是hexo g就可以了：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<pre><code class="bash">$ hexo generate
+</code></pre>
 <p>然后可以写文章啦^ </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">$ hexo new &quot;My New Post&quot;
+</code></pre>
 <p>去source下找到生成的marddown格式的文件，编辑就好啦。 记得编辑完，Hexo g一下。</p>
 <p>启动本地服务可以先看下效果：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<pre><code class="bash">$ hexo server
+</code></pre>
 <h2 id="每次部署github"><a href="#每次部署github" class="headerlink" title="每次部署github"></a>每次部署github</h2><p>每次执行这三条命令就OK了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo clean</div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<pre><code class="bash">$ hexo clean
+</code></pre>
+<pre><code class="bash">$ hexo generate
+</code></pre>
+<pre><code class="bash">$ hexo deploy
+</code></pre>
 <p>clean会把public和相关数据全部删掉，慎用。我一般就hexo g和hexo d两下，就可以在github上部署成功。</p>
 <p>然后访问<a href="https://tuzilingdang.github.io" target="_blank" rel="external">tuzilingdang.github.io</a>，换成自己的名字能看到了。</p>
   
@@ -223,6 +240,16 @@
 		<a href="http://yoursite.com" target="_blank" title="April Ji">April Ji</a>
 		
 		</p>
+
+	<script src="/js/jquery-2.1.0.min.js"></script>
+	<script src="/js/prettify.js"></script>
+	<script type="text/javascript">
+	$(window).load(function(){
+	$('pre').addClass('prettyprint linenums').attr('style', 'overflow:scroll;');
+	 $('pre').addClass('prettyprint linenums');
+	   prettyPrint();
+	 })
+	</script>
 </div>
 </footer>
     <script src="/js/jquery-2.1.0.min.js"></script>

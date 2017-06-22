@@ -22,6 +22,8 @@
     
     <link rel="apple-touch-icon" href="/img/april.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    <link rel="stylesheet" href="/css/desert.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/prettify.css" media="screen" type="text/css">
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -46,8 +48,6 @@
 						<li><a href="/">Home</a></li>
 					
 						<li><a href="/archives">Archives</a></li>
-					
-						<li><a href="/resume">about me</a></li>
 					
 					<li>
 					
@@ -132,13 +132,13 @@
 <p>憋出大招，用事件的targetTouches属性来计算滑动距离，代码如下。</p>
 <pre><code>var startPoint = {}, endPoint  ={};
 $(&quot;#vipList .swiper-container ul li&quot;).unbind()
-.on(&apos;touchstart&apos;,function(e){
+.on(&#39;touchstart&#39;,function(e){
     startPoint.x = e.targetTouches[0].clientX;
     endPoint.x = e.targetTouches[0].clientX;
 })
-.on(&apos;touchmove&apos;,function(e){
+.on(&#39;touchmove&#39;,function(e){
      endPoint.x = e.targetTouches[0].clientX;
-}).on(&apos;touchend&apos;,function(e){
+}).on(&#39;touchend&#39;,function(e){
     var moveDistance = startPoint.x - endPoint.x;  
     console.log(&quot;moveDistance:&quot;+moveDistance);
 }
@@ -275,6 +275,16 @@ $(&quot;#vipList .swiper-container ul li&quot;).unbind()
 		<a href="http://yoursite.com" target="_blank" title="April Ji">April Ji</a>
 		
 		</p>
+
+	<script src="/js/jquery-2.1.0.min.js"></script>
+	<script src="/js/prettify.js"></script>
+	<script type="text/javascript">
+	$(window).load(function(){
+	$('pre').addClass('prettyprint linenums').attr('style', 'overflow:scroll;');
+	 $('pre').addClass('prettyprint linenums');
+	   prettyPrint();
+	 })
+	</script>
 </div>
 </footer>
     <script src="/js/jquery-2.1.0.min.js"></script>

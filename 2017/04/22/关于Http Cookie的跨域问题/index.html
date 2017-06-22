@@ -20,6 +20,8 @@
     
     <link rel="apple-touch-icon" href="/img/april.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    <link rel="stylesheet" href="/css/desert.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/prettify.css" media="screen" type="text/css">
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -44,8 +46,6 @@
 						<li><a href="/">Home</a></li>
 					
 						<li><a href="/archives">Archives</a></li>
-					
-						<li><a href="/resume">about me</a></li>
 					
 					<li>
 					
@@ -97,7 +97,7 @@
 <p>“原页面的Cookies信息”<br><img src="/img/关于Http Cookie的跨域问题/3.png" alt="43"></p>
 <p>然后问题就来了，看起来明明是一样的接口调用，重写的页面不能保持登录状态，而对比之前页面，唯一的不同就是接口2调用时，Request Cookies里面没有值。 那这个值到底是怎么来的，搞清楚这个问题应该就可以解决了。</p>
 <h3 id="问题的解决之道"><a href="#问题的解决之道" class="headerlink" title="问题的解决之道"></a>问题的解决之道</h3><h3 id="Request-Coolkies-的来历"><a href="#Request-Coolkies-的来历" class="headerlink" title="Request Coolkies 的来历"></a>Request Coolkies 的来历</h3><p>要弄清楚这个问题，还是要从浏览器与服务器二者之间的通信说起。浏览器需要从服务器拿数据，需要通过ajax请求来实现。我们可以在调试工具中观察调用接口信息时，这个Request Cookies 和 Response Cookies是放在XHR这个对象里的。 这个东东的全称就是XmlHttpRequest，ajax中最最重要的东西就是它了。可以这样创建它：</p>
-<pre><code>variable = new XMLHttpRequest();
+<pre><code> variable = new XMLHttpRequest();
 </code></pre>  
 	</div>
 		<footer class="article-footer clearfix">
@@ -202,6 +202,16 @@
 		<a href="http://yoursite.com" target="_blank" title="April Ji">April Ji</a>
 		
 		</p>
+
+	<script src="/js/jquery-2.1.0.min.js"></script>
+	<script src="/js/prettify.js"></script>
+	<script type="text/javascript">
+	$(window).load(function(){
+	$('pre').addClass('prettyprint linenums').attr('style', 'overflow:scroll;');
+	 $('pre').addClass('prettyprint linenums');
+	   prettyPrint();
+	 })
+	</script>
 </div>
 </footer>
     <script src="/js/jquery-2.1.0.min.js"></script>
