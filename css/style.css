@@ -236,12 +236,6 @@ input[type="search"]::-webkit-search-decoration {
   color: #fff;
   padding-right: 4px;
 }
-article .article-content pre {
-  border: 1px solid #c0c0c0 1px solid;
-  background: #1c285e;
-  color: #fcec57;
-  padding: 1rem;
-}
 /* css3 animate */
 .animated {
   margin-top: -1rem;
@@ -422,6 +416,7 @@ body >header a {
 }
 @media only screen and (min-width: 768px) {
   #imglogo {
+    margin-left: 0.5rem;
     width: 5em;
   }
 }
@@ -451,7 +446,6 @@ body >header a {
 }
 #textlogo h1.site-name {
   width: 86%;
-  margin-left: 3rem;
   font-family: "covered_by_your_graceregular";
   font-size: 200%;
   line-height: 1.5;
@@ -460,26 +454,29 @@ body >header a {
 }
 @media only screen and (min-width: 768px) {
   #textlogo h1.site-name {
+    margin-left: 1rem;
     font-size: 240%;
   }
 }
 @media only screen and (min-width: 1024px) {
   #textlogo h1.site-name {
+    margin-left: 3rem;
     font-size: 280%;
   }
 }
 #textlogo h2.blog-motto {
   font-size: 0.7em;
   font-weight: normal;
-  margin-left: 3rem;
 }
 @media only screen and (min-width: 768px) {
   #textlogo h2.blog-motto {
+    margin-left: 1rem;
     font-size: 100%;
   }
 }
 @media only screen and (min-width: 1024px) {
   #textlogo h2.blog-motto {
+    margin-left: 3rem;
     font-size: 110%;
   }
 }
@@ -973,64 +970,44 @@ article .article-content ol li {
 article .article-content dl dt {
   font-weight: blod;
 }
-article .article-content ul li>code,
-article .article-content ol li>code,
-article .article-content p code,
-article .article-content strong code,
-article .article-content em code {
-  font-family: Monaco, Menlo, Consolas, Courier New, monospace;
-  background: #eee;
-  color: #747070;
-  border: 1px solid #d6d6d6;
-  padding: 0 5px;
-  margin: 0 2px;
-  font-size: 90%;
-  white-space: nowrap;
-  text-shadow: 0 1px #fff;
-}
-article .article-content p {
+p {
   font-size: 105%;
   line-height: 1.7;
   margin: 0.7em 0;
 }
 @media only screen and (min-width: 1024px) {
-  article .article-content p {
+  p {
     margin: 1.2em 0;
   }
 }
-article .article-content img,
-article .article-content video,
-article .article-content figure img {
-  max-width: 60%;
+img,
+video,
+figure img {
+  max-width: 100%;
   display: block;
-  margin: auto;
+/*margin auto*/
+  margin-top: 1rem;
   height: auto;
   vertical-align: middle;
-  padding-top: 0.5em;
 }
 @media only screen and (min-width: 1024px) {
-  article .article-content img,
-  article .article-content video,
-  article .article-content figure img {
-    padding-top: 0.7em;
-  }
 }
-article .article-content figcaption,
-article .article-content .caption {
+figcaption,
+.caption {
   text-align: center;
   display: block;
   font-size: 0.9em;
   font-weight: blod;
 }
-article .article-content .video-container {
+.video-container {
   position: relative;
   padding-top: 56%;
   height: 0;
   overflow: hidden;
 }
-article .article-content .video-container iframe,
-article .article-content .video-container object,
-article .article-content .video-container embed {
+.video-container iframe,
+.video-container object,
+.video-container embed {
   position: absolute;
   top: 0;
   left: 0;
@@ -1038,32 +1015,32 @@ article .article-content .video-container embed {
   height: 100%;
   margin-top: 0;
 }
-article .article-content table {
+table {
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
 }
-article .article-content table th {
+table th {
   font-weight: bold;
   border-bottom: 3px solid #dbdbdb;
   padding-bottom: 0.5em;
 }
-article .article-content table td {
+table td {
   border-bottom: 1px solid #dbdbdb;
   padding: 10px 0;
 }
-article .article-content .pullquote {
+.pullquote {
   text-align: left;
   width: 45%;
   margin: 0;
   border: none;
 }
-article .article-content .left {
+.left {
   margin-left: 0.5em;
   margin-right: 1em;
   float: left;
 }
-article .article-content .right {
+.right {
   margin-right: 0.5em;
   margin-left: 1em;
   float: right;
