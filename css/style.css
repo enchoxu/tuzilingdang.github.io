@@ -1293,7 +1293,7 @@ footer.article-footer {
   background: #2ca6cb;
 }
 .article-nav {
-  padding: 0 10%;
+  padding: 1rem 10%;
 }
 @media only screen and (min-width: 768px) {
   .article-nav {
@@ -1726,7 +1726,6 @@ footer {
   padding: 0 2% 0.5em;
   height: 3rem;
   bottom: 0px;
-  width: 100%;
 }
 #footer {
   width: 95%;
@@ -1753,7 +1752,6 @@ footer {
   }
 }
 .social-font {
-  width: 100%;
   margin: 0 auto;
   float: left;
   padding-left: 3%;
