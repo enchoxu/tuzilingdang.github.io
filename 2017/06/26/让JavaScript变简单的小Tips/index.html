@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>JavaScript学习笔记-函数柯里化 | April&#39;s Blog</title>
+    <title>让JavaScript变简单的小Tips | April&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="April Ji">
     
-    <meta name="description" content="最近《JavaScript语言精粹》这本书看到函数一章，提到了函数柯里化。之前在别的博客里也见过，没有仔细留意，只觉得好抽象的名词，略过…这次仔细地读了一遍，写篇博客记录下来防止有记忆的脑细胞躲起来不见我了。
-柯里化是什么看了半天，柯里化应该就是，本来一个函数接受多个参数，柯里化之后变成传单一参数进">
+    <meta name="description" content="平时写代码，看到一堆一堆的js代码经常眼花缭乱的，有许多写法上的小技巧可以让代码变得更加整洁易读。 记录一下这些很有用的小tips， 让写代码的效率变得高高的吧。 ^_^
+1. 变量判断赋值长长的写法：
+if(var1 !== null || var1 !== undefined || var1 !">
     
     
     
@@ -68,15 +69,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/03/07/JavaScript学习笔记-函数柯里化/" title="JavaScript学习笔记-函数柯里化" itemprop="url">JavaScript学习笔记-函数柯里化</a>
+      <a href="/2017/06/26/让JavaScript变简单的小Tips/" title="让JavaScript变简单的小Tips" itemprop="url">让JavaScript变简单的小Tips</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="April Ji">April Ji</a>
     </p>
   <p class="article-time">
-    <time datetime="2017-03-07T06:34:08.000Z" itemprop="datePublished">2017-03-07</time>
-    Updated:<time datetime="2017-05-30T13:11:12.000Z" itemprop="dateModified">2017-05-30</time>
+    <time datetime="2017-06-25T17:15:25.000Z" itemprop="datePublished">2017-06-26</time>
+    Updated:<time datetime="2017-06-25T17:19:05.000Z" itemprop="dateModified">2017-06-26</time>
     
   </p>
 </header>
@@ -85,29 +86,119 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#柯里化是什么"><span class="toc-number">1.</span> <span class="toc-text">柯里化是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要柯里化"><span class="toc-number">2.</span> <span class="toc-text">为什么要柯里化</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-变量判断赋值"><span class="toc-number">1.</span> <span class="toc-text">1. 变量判断赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-for循环"><span class="toc-number">2.</span> <span class="toc-text">2. for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ES6中的一些简单写法"><span class="toc-number">3.</span> <span class="toc-text">3. ES6中的一些简单写法</span></a></li></ol>
 		</div>
 		
-		<p>最近《JavaScript语言精粹》这本书看到函数一章，提到了函数柯里化。之前在别的博客里也见过，没有仔细留意，只觉得好抽象的名词，略过…这次仔细地读了一遍，写篇博客记录下来防止有记忆的脑细胞躲起来不见我了。</p>
-<h3 id="柯里化是什么"><a href="#柯里化是什么" class="headerlink" title="柯里化是什么"></a>柯里化是什么</h3><p>看了半天，柯里化应该就是，本来一个函数接受多个参数，柯里化之后变成传单一参数进来，但是会用上原来一串参数合在一起，返回一个最终的结果。其实也就是原来传进来的参数通过闭包保存下来，再加上新的参数进行处理。<br>啥都不说了，先上个书中的例子：</p>
-<p><img src="/img/JavaScript学习笔记-函数柯里化/1.png" alt="43"></p>
-<p>调用一下：</p>
-<p><img src="/img/JavaScript学习笔记-函数柯里化/2.png" alt="43"></p>
-<p>这里要注意，arguments作为函数默认传入的参数，它并不是一个数组，而真实的身份是对象。所以method这个函数要写成下面这个样子，是运行不出来滴。</p>
-<p><img src="/img/JavaScript学习笔记-函数柯里化/3.png" alt="43"></p>
-<p>所以输出的结果第一遍有个报错提示，第二遍就有结果了。</p>
-<p><img src="/img/JavaScript学习笔记-函数柯里化/4.png" alt="43"></p>
-<h3 id="为什么要柯里化"><a href="#为什么要柯里化" class="headerlink" title="为什么要柯里化"></a>为什么要柯里化</h3><p>好好的函数，if else写出来也可以运行的稳稳的，为什么要用这种抽象的技巧来实现呢？《语言精粹》柯里化这里也就小半页，只讲了个add函数相关的例子。还是拿大红宝书-高级程序设计对比一下看看。</p>
-<p>与柯里化最相关的是函数绑定，柯里化基本方法和函数绑定是一样的。唯一不同的是柯里化调用了一个函数，返回的函数需要在传入参数。</p>
-<p>说了半天，到底能应用在什么地方呢？看了挺多相关内容对柯里化的作用都解释的不是很清楚。能想到到就是减少函数复用. 另外在ES5中，bind（）函数也用到了。IE’6~8不能使用bind（）函数，自己写的话就是下面这样子：</p>
-<p><img src="/img/JavaScript学习笔记-函数柯里化/5.png" alt="43"></p>
+		<p>平时写代码，看到一堆一堆的js代码经常眼花缭乱的，有许多写法上的小技巧可以让代码变得更加整洁易读。 记录一下这些很有用的小tips， 让写代码的效率变得高高的吧。 ^_^</p>
+<h3 id="1-变量判断赋值"><a href="#1-变量判断赋值" class="headerlink" title="1. 变量判断赋值"></a>1. 变量判断赋值</h3><p>长长的写法：</p>
+<pre><code>if(var1 !== null || var1 !== undefined || var1 !== &#39;&#39; ) {
+    var var2 = var1;
+}
+</code></pre><p>简便写法：</p>
+<pre><code>var var2 = var1 || &#39;new&#39;;
+</code></pre><h3 id="2-for循环"><a href="#2-for循环" class="headerlink" title="2. for循环"></a>2. for循环</h3><p>####(1) 循环的简单写法</p>
+<p>长长的写法：</p>
+<pre><code>var arr = [1,1,1,3,4,5];
+for(let i = 0; i &lt; arr.length; i++){
+    console.log(arr[i]);
+}
+</code></pre><p>简便写法：</p>
+<pre><code> var arr = [1,1,1,3,4,5];
+ for(let index in arr){
+     console.log(arr[index]);
+ }
+</code></pre><p>or 另一种简单的写法：</p>
+<pre><code>var arr = [1,1,1,3,4,5];
+arr.forEach(function(element){
+    console.log(element);
+});
+</code></pre><p>####(2) 循环中带了太多个0</p>
+<p>比如：</p>
+<pre><code>for (let i = 0; i &lt; 10000000000; i++){}
+</code></pre><p>怎么样，数不清了吧……<br>可以这样写：</p>
+<pre><code>for (let i = 0; i &lt; 1e10; i ++) {}
+</code></pre><h3 id="3-ES6中的一些简单写法"><a href="#3-ES6中的一些简单写法" class="headerlink" title="3. ES6中的一些简单写法"></a>3. ES6中的一些简单写法</h3><p>（1）箭头函数</p>
+<p>一条语句的写法：</p>
+<pre><code>// 一条语句
+function sayName(name){
+    return name;
+}
+
+// 简便写法
+sayName = (name) =&gt; name;
+</code></pre><p>多条语句写法：</p>
+<pre><code>// 多条语句
+function add(arr) {
+    var result = 0;
+    for (let i = 0; i ++; i &lt; arr.length) {
+        result = result + arr[i];
+    }
+    return result;
+}
+
+// ES6写法
+var add = (arr) =&gt; {
+    var result = 0;
+    arr.forEach((item) =&gt; {
+        result = result + item;
+    });
+    return result;
+}
+
+// sort函数
+var result = arr.sort(function(a,b){
+    return a-b;
+});
+
+// ES6写法：
+var result = arr.sort( (a,b) =&gt; a-b);
+</code></pre><p>（2）解构赋值</p>
+<pre><code>// 原写法
+var a1 = 3;
+var a2 = 2;
+var a3 = 1;
+
+// ES6写法
+var [a, b, c] = [1, 2, 3];
+
+// 作用于对象
+var person = {
+    name: &#39;Amy&#39;,
+    age: 18
+};
+var {name, age} = person;
+console.log(name); // &#39;Amy&#39;
+console.log(age); // 18
+
+// 作用于字符串
+var [a,b,c] = &#39;cat&#39;;
+console.log(a); // &#39;c&#39;
+console.log(b); // &#39;a&#39;
+console.log(b); // &#39;t&#39;
+</code></pre><p>（3）默认参数值</p>
+<pre><code>//     麻烦的写法
+function sayHi(name, age) {
+    if(name === undefined) {
+        name = &#39;Amy&#39;;
+    }
+    if(age === undefined) {
+        age = 18;
+    }
+    console.log(&#39;Hello,My name is&#39; + name + &#39;, I\&#39;m &#39; + age + &#39; year\&#39;s old!&#39;);
+}
+
+// 简单的写法
+var sayHi = (name = &#39;Amy&#39;, age = 18) =&gt; (
+        console.log(&#39;Hello,My name is&#39; + name + &#39;, I\&#39;m &#39; + age + &#39; year\&#39;s old!&#39;);
+);
+</code></pre><p>已经1点多了，只能先整理到这里，后面有时间再补充啦。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/柯里化/">柯里化</a>
+  <span></span> <a href="/tags/JavaScript-ES6-Tips/">JavaScript ES6 Tips</a>
   </div>
 
 
@@ -115,7 +206,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2017/03/07/JavaScript学习笔记-函数柯里化/" data-title="JavaScript学习笔记-函数柯里化 | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2017/06/26/让JavaScript变简单的小Tips/" data-title="让JavaScript变简单的小Tips | April&#39;s Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -124,19 +215,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/03/08/JS事件-2-touch事件的兼容问题/" title="JS事件(2)-touch事件的兼容问题">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  JS事件(2)-touch事件的兼容问题</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/02/26/移动Web开发之远程调试（2）/"  title="移动Web开发之远程真机、模拟调试（2）">
+<a href="/2017/06/18/Web版五子棋小游戏的实现-Canvas/"  title="Web版五子棋小游戏的实现-Canvas">
  <strong>NEXT:</strong><br/> 
- <span>移动Web开发之远程真机、模拟调试（2）
+ <span>Web版五子棋小游戏的实现-Canvas
 </span>
 </a>
 </div>
@@ -149,7 +232,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#柯里化是什么"><span class="toc-number">1.</span> <span class="toc-text">柯里化是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要柯里化"><span class="toc-number">2.</span> <span class="toc-text">为什么要柯里化</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-变量判断赋值"><span class="toc-number">1.</span> <span class="toc-text">1. 变量判断赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-for循环"><span class="toc-number">2.</span> <span class="toc-text">2. for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ES6中的一些简单写法"><span class="toc-number">3.</span> <span class="toc-text">3. ES6中的一些简单写法</span></a></li></ol>
   </div>
 
 <div id="asidepart">

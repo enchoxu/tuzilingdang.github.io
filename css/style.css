@@ -1726,6 +1726,7 @@ footer {
   padding: 0 2% 0.5em;
   height: 3rem;
   bottom: 0px;
+  position: sticky;
 }
 #footer {
   width: 95%;
