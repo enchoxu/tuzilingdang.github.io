@@ -38,7 +38,7 @@
 				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
 				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -51,7 +51,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:yoursite.com">
 					</form>
 					
@@ -75,7 +75,7 @@
     </p>
   <p class="article-time">
     <time datetime="2017-07-02T09:41:28.000Z" itemprop="datePublished">2017-07-02</time>
-    Updated:<time datetime="2017-07-02T12:00:54.000Z" itemprop="dateModified">2017-07-02</time>
+    更新日期:<time datetime="2017-07-02T12:06:45.000Z" itemprop="dateModified">2017-07-02</time>
     
   </p>
 </header>
@@ -83,8 +83,8 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Backbone做了什么"><span class="toc-number">1.</span> <span class="toc-text">Backbone做了什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backbone的核心构成"><span class="toc-number">2.</span> <span class="toc-text">Backbone的核心构成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Model和View"><span class="toc-number">2.1.</span> <span class="toc-text">Model和View</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Model做了什么"><span class="toc-number">2.1.1.</span> <span class="toc-text">Model做了什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#View做了什么"><span class="toc-number">2.1.2.</span> <span class="toc-text">View做了什么</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Collections"><span class="toc-number">2.2.</span> <span class="toc-text">Collections</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Collecions做了什么"><span class="toc-number">2.2.1.</span> <span class="toc-text">Collecions做了什么</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Router"><span class="toc-number">2.3.</span> <span class="toc-text">Router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Events"><span class="toc-number">2.4.</span> <span class="toc-text">Events</span></a></li></ol></li></ol>
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Backbone做了什么"><span class="toc-number">1.</span> <span class="toc-text">Backbone做了什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backbone的核心构成"><span class="toc-number">2.</span> <span class="toc-text">Backbone的核心构成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Model和View"><span class="toc-number">2.1.</span> <span class="toc-text">Model和View</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Model做了什么"><span class="toc-number">2.1.0.1.</span> <span class="toc-text">Model做了什么</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#View做了什么"><span class="toc-number">2.1.0.2.</span> <span class="toc-text">View做了什么</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Collections"><span class="toc-number">2.2.</span> <span class="toc-text">Collections</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Collecions做了什么"><span class="toc-number">2.2.0.1.</span> <span class="toc-text">Collecions做了什么</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Router"><span class="toc-number">2.3.</span> <span class="toc-text">Router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Events"><span class="toc-number">2.4.</span> <span class="toc-text">Events</span></a></li></ol></li></ol>
 		</div>
 		
 		<p>最近一两年，react和vue火的不要不要的，各种前端框架层出不穷，backbone似乎普遍使用的比较少。 因为项目上用到它，还是有研究一下的必要。 但是最主要的原因是，backbone只有两千多行，如果想要深入的钻研JavaScript，并且想了解深层的MVC框架机制的话，backbone是一个非常好的用来研究源码的库。</p>
@@ -93,18 +93,18 @@
 <h2 id="Backbone做了什么"><a href="#Backbone做了什么" class="headerlink" title="Backbone做了什么"></a>Backbone做了什么</h2><p>Backbone最最重要的工作是把业务逻辑和用户界面分离开来。</p>
 <h2 id="Backbone的核心构成"><a href="#Backbone的核心构成" class="headerlink" title="Backbone的核心构成"></a>Backbone的核心构成</h2><p>严格来讲，Backbone不是一个MVC框架。之所以这么讲，是因为在backbone中，model层和view层都比较清晰，但controller在这里体现的并不明显。与之作用类似的是Router这个东东，具体的用法会在笔记中记录下来。<br>最重要的Model和View， 功能如下：</p>
 <h3 id="Model和View"><a href="#Model和View" class="headerlink" title="Model和View"></a>Model和View</h3><p>描述清晰的官方文档图1：<br><img src="http://backbonejs.org/docs/images/intro-model-view.svg" alt="Model and View"></p>
-<h4 id="Model做了什么"><a href="#Model做了什么" class="headerlink" title="Model做了什么"></a>Model做了什么</h4><ul>
+<h5 id="Model做了什么"><a href="#Model做了什么" class="headerlink" title="Model做了什么"></a>Model做了什么</h5><ul>
 <li>协调数据和业务逻辑</li>
 <li>从服务端加载和保存数据</li>
 <li>数据变化时发出事件</li>
 </ul>
-<h4 id="View做了什么"><a href="#View做了什么" class="headerlink" title="View做了什么"></a>View做了什么</h4><ul>
+<h5 id="View做了什么"><a href="#View做了什么" class="headerlink" title="View做了什么"></a>View做了什么</h5><ul>
 <li>监听UI变化并渲染UI</li>
 <li>处理用户输入和交互事件</li>
 <li>将捕获的输入数据传给Model</li>
 </ul>
 <h3 id="Collections"><a href="#Collections" class="headerlink" title="Collections"></a>Collections</h3><p>描述清晰的官方文档图2：<br><img src="http://backbonejs.org/docs/images/intro-collections.svg" alt="Collections"></p>
-<h4 id="Collecions做了什么"><a href="#Collecions做了什么" class="headerlink" title="Collecions做了什么"></a>Collecions做了什么</h4><ul>
+<h5 id="Collecions做了什么"><a href="#Collecions做了什么" class="headerlink" title="Collecions做了什么"></a>Collecions做了什么</h5><ul>
 <li>处理一组相关的Model</li>
 <li>加载和保存新的Model到服务器</li>
 <li>为Model列表的聚合和计算提供帮助函数</li>
@@ -146,22 +146,22 @@
 
 	
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Backbone做了什么"><span class="toc-number">1.</span> <span class="toc-text">Backbone做了什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backbone的核心构成"><span class="toc-number">2.</span> <span class="toc-text">Backbone的核心构成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Model和View"><span class="toc-number">2.1.</span> <span class="toc-text">Model和View</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Model做了什么"><span class="toc-number">2.1.1.</span> <span class="toc-text">Model做了什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#View做了什么"><span class="toc-number">2.1.2.</span> <span class="toc-text">View做了什么</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Collections"><span class="toc-number">2.2.</span> <span class="toc-text">Collections</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Collecions做了什么"><span class="toc-number">2.2.1.</span> <span class="toc-text">Collecions做了什么</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Router"><span class="toc-number">2.3.</span> <span class="toc-text">Router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Events"><span class="toc-number">2.4.</span> <span class="toc-text">Events</span></a></li></ol></li></ol>
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Backbone做了什么"><span class="toc-number">1.</span> <span class="toc-text">Backbone做了什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backbone的核心构成"><span class="toc-number">2.</span> <span class="toc-text">Backbone的核心构成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Model和View"><span class="toc-number">2.1.</span> <span class="toc-text">Model和View</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Model做了什么"><span class="toc-number">2.1.0.1.</span> <span class="toc-text">Model做了什么</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#View做了什么"><span class="toc-number">2.1.0.2.</span> <span class="toc-text">View做了什么</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Collections"><span class="toc-number">2.2.</span> <span class="toc-text">Collections</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Collecions做了什么"><span class="toc-number">2.2.0.1.</span> <span class="toc-text">Collecions做了什么</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Router"><span class="toc-number">2.3.</span> <span class="toc-text">Router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Events"><span class="toc-number">2.4.</span> <span class="toc-text">Events</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
