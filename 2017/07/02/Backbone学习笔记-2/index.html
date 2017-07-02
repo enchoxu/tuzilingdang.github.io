@@ -1,0 +1,458 @@
+
+ <!DOCTYPE HTML>
+<html lang="中文">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Backbone学习笔记(2) | April&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="April Ji">
+    
+    <meta name="description" content="TodoList的实现（1）创建一个Todo的Model用到的API：Extend (API-1)  
+ Backbone.Model.extend(properties, [classProperties])
+这是个很有意思的函数，Extend可以建立一条原型链，用它创建的子类可以继续被exten">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/april.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    <link rel="stylesheet" href="/css/desert.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/prettify.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/april.jpg" alt="April&#39;s Blog" title="April&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
+				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/02/Backbone学习笔记-2/" title="Backbone学习笔记(2)" itemprop="url">Backbone学习笔记(2)</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="April Ji">April Ji</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-07-02T12:10:03.000Z" itemprop="datePublished">2017-07-02</time>
+    Updated:<time datetime="2017-07-02T15:18:36.000Z" itemprop="dateModified">2017-07-02</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TodoList的实现"><span class="toc-number">1.</span> <span class="toc-text">TodoList的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）创建一个Todo的Model"><span class="toc-number">1.1.</span> <span class="toc-text">（1）创建一个Todo的Model</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#用到的API："><span class="toc-number">1.1.0.1.</span> <span class="toc-text">用到的API：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#创建Todo-Model："><span class="toc-number">1.1.0.2.</span> <span class="toc-text">创建Todo Model：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）创建一个Todo的Collection"><span class="toc-number">1.2.</span> <span class="toc-text">（2）创建一个Todo的Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）创建View视图"><span class="toc-number">1.3.</span> <span class="toc-text">（3）创建View视图</span></a></li></ol></li></ol>
+		</div>
+		
+		<h2 id="TodoList的实现"><a href="#TodoList的实现" class="headerlink" title="TodoList的实现"></a>TodoList的实现</h2><h3 id="（1）创建一个Todo的Model"><a href="#（1）创建一个Todo的Model" class="headerlink" title="（1）创建一个Todo的Model"></a>（1）创建一个Todo的Model</h3><h5 id="用到的API："><a href="#用到的API：" class="headerlink" title="用到的API："></a>用到的API：</h5><p><strong>Extend (API-1)</strong>  </p>
+<pre><code> Backbone.Model.extend(properties, [classProperties])
+</code></pre><p>这是个很有意思的函数，Extend可以建立一条原型链，用它创建的子类可以继续被extend。</p>
+<p><strong>model.defaults (API-2)</strong> </p>
+<pre><code>model.defaults or model.defaults()
+</code></pre><p>defaults可以用来制定Model的默认值， 当一个Model的实例被创建时，所有未定义的属性都可以用defaults中设定的属性值来填充。</p>
+<h5 id="创建Todo-Model："><a href="#创建Todo-Model：" class="headerlink" title="创建Todo Model："></a>创建Todo Model：</h5><p>一个Todolist中，包含了许多个todo的Model，我们可以通过extend来创建一个todo的Model。</p>
+<pre><code>  var Todo = Backbone.Model.extend({
+
+    defaults: function() {
+      return {
+        title: &quot;empty todo...&quot;,
+        order: Todos.nextOrder(),
+        done: false
+      };
+    },
+
+    toggle: function() {
+      this.save({done: !this.get(&quot;done&quot;)});
+    }
+
+  });
+</code></pre><p>其中，toggle函数用于反转每个todo实例的状态。</p>
+<h3 id="（2）创建一个Todo的Collection"><a href="#（2）创建一个Todo的Collection" class="headerlink" title="（2）创建一个Todo的Collection"></a>（2）创建一个Todo的Collection</h3><p>所有要做的事项可以看作一个集合，这个集合中包含了所有Todo的Model，这就是一个TodoList。</p>
+<p>用到的API：</p>
+<p><strong>collection.model([attrs], [options])</strong> </p>
+<p>用于指定集合中的模型，一种用法是直接传递原始属性的对象，也就是以下的用法；另一种用法是包含多态的模型，具体可见官方文档：<a href="http://backbonejs.org/#Collection-model" target="_blank" rel="external">Collection-model</a></p>
+<p><strong>collection.comparator</strong> </p>
+<p>用于保持collection中models的顺序，每当加入一个model时，都会以特定的顺序加入进来。</p>
+<pre><code>  var TodoList = Backbone.Collection.extend({
+
+    // 包含的Model是Todo
+    model: Todo,
+
+    // 木有后台，这里保存所有todo实例用到的localStorage
+    localStorage: new Backbone.LocalStorage(&quot;todos-backbone&quot;),
+
+    // 过滤出已经完成的事项
+    done: function() {
+      return this.where({done: true});
+    },
+
+    // 过滤出待完成的事项
+    remaining: function() {
+      return this.where({done: false});
+    },
+
+    // 正常每次生成todo实例，需要保存数据库，这时要生成一个order值
+    nextOrder: function() {
+      if (!this.length) return 1;
+      return this.last().get(&#39;order&#39;) + 1;
+    },
+
+    // Todos are sorted by their original insertion order.
+    comparator: &#39;order&#39;
+
+  });
+</code></pre><p>写完记得new一下：</p>
+<pre><code>  var Todos = new TodoList;
+</code></pre><h3 id="（3）创建View视图"><a href="#（3）创建View视图" class="headerlink" title="（3）创建View视图"></a>（3）创建View视图</h3><p>用到的API：</p>
+<p><strong>view.el</strong></p>
+<p>Backbone中的视图都会有一个DOM元素，所以views任何时候都可以被渲染并且一次性插入DOM中。这样的方式将reflows和repaint降低到最少，从而保持高性能的UI渲染。</p>
+<p>this.el可以从DOM选择器中解析出来，不然它会通过view的tagName、className、id和属性创建出来。 以下的TodoView就设置了tagName，从而创建了el。 如果这些都没设置的话，el就变成了空的div元素。 一个el和元素的关联通过view的构造器来传递。</p>
+<p>el和元素的关系稍后补充。</p>
+<p><strong>view.render()</strong></p>
+<p>view的render是默认不用操作的。当然你可以重写这个函数，可以把model的数据渲染到模版上，之后view的el就会被新的模版数据的HTML更新。最好的方式就是在渲染的最后一步来return这个函数来启用链式的函数调用。</p>
+<p>在backbone中，可以使用组合的HTML字符串，也可以用document.createElement来生产DOM树去渲染。Mustache.js，Haml-js和Eco是很好的选择，具体使用没有在bacbone里做尝试。但bachbone严重依赖underscore.js,如果是倾向用使用简单的插入javascript的模版的话，还是用underscore.js吧。</p>
+<p><strong>view.events or view.events()</strong></p>
+<p>events的哈希表指定了一系列的DOM事件，这些事件通过事件委托绑定了View的方法。在<strong>调用initialize之前</strong>，Backbone会自动在实例化的时候添加这些事件监听。</p>
+<p><strong>view.initialize</strong></p>
+<p>  TodoView监听model的变化，然后重新渲染。 Todo 和 TodoView是一对一的关系，所以这里设置了直接的引用。</p>
+<p>首先Todo要创建一个view视图：</p>
+<pre><code>  var TodoView = Backbone.View.extend({
+
+    tagName:  &quot;li&quot;,
+
+    // 对单个的todo的模版做缓存
+    template: _.template($(&#39;#item-template&#39;).html()),
+
+    // events事件的hash
+    events: {
+      &quot;click .toggle&quot;   : &quot;toggleDone&quot;,
+      &quot;dblclick .view&quot;  : &quot;edit&quot;,
+      &quot;click a.destroy&quot; : &quot;clear&quot;,
+      &quot;keypress .edit&quot;  : &quot;updateOnEnter&quot;,
+      &quot;blur .edit&quot;      : &quot;close&quot;
+    },
+
+
+    initialize: function() {
+      this.listenTo(this.model, &#39;change&#39;, this.render);
+      this.listenTo(this.model, &#39;destroy&#39;, this.remove);
+    },
+
+    // 对todo的item做渲染
+    render: function() {
+      this.$el.html(this.template(this.model.toJSON()));
+      this.$el.toggleClass(&#39;done&#39;, this.model.get(&#39;done&#39;));
+      this.input = this.$(&#39;.edit&#39;);
+      return this;
+    },
+
+    // 反转 “done” 的状态
+    toggleDone: function() {
+      this.model.toggle();
+    },
+
+    // 通过&quot;editing&quot;` 状态的改变控制显示input框.
+    edit: function() {
+      this.$el.addClass(&quot;editing&quot;);
+      this.input.focus();
+    },
+
+    // 关闭“editing”状态，保存新的todo的item
+    close: function() {
+      var value = this.input.val();
+      if (!value) {
+        this.clear();
+      } else {
+        this.model.save({title: value});
+        this.$el.removeClass(&quot;editing&quot;);
+      }
+    },
+
+    // 13是enter键的keynode，enter之后更新
+    updateOnEnter: function(e) {
+      if (e.keyCode == 13) this.close();
+    },
+
+    // 删除todo的item
+    clear: function() {
+      this.model.destroy();
+    }
+
+  });
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Backbone/">Backbone</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2017/07/02/Backbone学习笔记-2/" data-title="Backbone学习笔记(2) | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/07/02/Backbone学习笔记-1/"  title="Backbone学习笔记(1)">
+ <strong>NEXT:</strong><br/> 
+ <span>Backbone学习笔记(1)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TodoList的实现"><span class="toc-number">1.</span> <span class="toc-text">TodoList的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）创建一个Todo的Model"><span class="toc-number">1.1.</span> <span class="toc-text">（1）创建一个Todo的Model</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#用到的API："><span class="toc-number">1.1.0.1.</span> <span class="toc-text">用到的API：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#创建Todo-Model："><span class="toc-number">1.1.0.2.</span> <span class="toc-text">创建Todo Model：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）创建一个Todo的Collection"><span class="toc-number">1.2.</span> <span class="toc-text">（2）创建一个Todo的Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）创建View视图"><span class="toc-number">1.3.</span> <span class="toc-text">（3）创建View视图</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Backbone/" title="Backbone">Backbone<sup>2</sup></a></li>
+		
+			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript-ES6-Tips/" title="JavaScript ES6 Tips">JavaScript ES6 Tips<sup>1</sup></a></li>
+		
+			<li><a href="/tags/canvas-五子棋/" title="canvas 五子棋">canvas 五子棋<sup>1</sup></a></li>
+		
+			<li><a href="/tags/touch事件/" title="touch事件">touch事件<sup>1</sup></a></li>
+		
+			<li><a href="/tags/事件-冒泡/" title="事件 冒泡">事件 冒泡<sup>1</sup></a></li>
+		
+			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
+		
+			<li><a href="/tags/柯里化/" title="柯里化">柯里化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/真机-微信-远程调试/" title="真机 微信 远程调试">真机 微信 远程调试<sup>2</sup></a></li>
+		
+			<li><a href="/tags/脚手架工具/" title="脚手架工具">脚手架工具<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/tuzilingdang for https://github.com/tuzilingdang" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">My Github: <a href="https://github.com/tuzilingdang" target="_blank" title="">https://github.com/tuzilingdang</a> 
+		</p> 
+
+
+
+	<script src="/js/jquery-2.1.0.min.js"></script>
+	<script src="/js/prettify.js"></script>
+	<script type="text/javascript">
+	$(window).load(function(){
+	$('pre').addClass('prettyprint linenums').attr('style', 'overflow:scroll;');
+	 $('pre').addClass('prettyprint linenums');
+	   prettyPrint();
+	 })
+	</script>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
