@@ -1,0 +1,415 @@
+
+ <!DOCTYPE HTML>
+<html lang="中文">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>\&lt;a&gt;标签的target属性使用及注意问题 | April&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="April Ji">
+    
+    <meta name="description" content="1. \标签的target的使用一般书写\标签，我们常常用到的属性有href、target、id，以此实现点击a标签跳转新的文档或者文档的某个部分的功能。 
+href属性用来描述跳转链接的地址，target用来定义被链接的文档在何处显示。target的值常见的有：
+
+
+
+值
+描述
+
+
+
+
+ view">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/april.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    <link rel="stylesheet" href="/css/desert.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/prettify.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/april.jpg" alt="April&#39;s Blog" title="April&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
+				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/09/05/a-标签的target属性使用及注意问题/" title="\&lt;a&gt;标签的target属性使用及注意问题" itemprop="url">\&lt;a&gt;标签的target属性使用及注意问题</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="April Ji">April Ji</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-09-05T15:11:43.000Z" itemprop="datePublished">2017-09-05</time>
+    Updated:<time datetime="2017-09-05T15:26:38.000Z" itemprop="dateModified">2017-09-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-标签的target的使用"><span class="toc-number">1.</span> <span class="toc-text">1. \标签的target的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-target-”-blank”的使用"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 target=”_blank”的使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-target使用需注意的问题"><span class="toc-number">2.</span> <span class="toc-text">2. target使用需注意的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-target-”-blank”带来的问题"><span class="toc-number">2.1.</span> <span class="toc-text">2.1      target=”_blank”带来的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#target-”-blank”的兼容性"><span class="toc-number">2.1.1.</span> <span class="toc-text">target=”_blank”的兼容性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#target-”-blank”的安全性"><span class="toc-number">2.1.2.</span> <span class="toc-text">target=”_blank”的安全性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#target-”-blank”的性能问题"><span class="toc-number">2.1.3.</span> <span class="toc-text">target=”_blank”的性能问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-target-”-blank”的优化方案"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 target=”_blank”的优化方案</span></a></li></ol></li></ol>
+		</div>
+		
+		<h2 id="1-标签的target的使用"><a href="#1-标签的target的使用" class="headerlink" title="1. \标签的target的使用"></a>1. \<a>标签的target的使用</a></h2><p>一般书写\<a>标签，我们常常用到的属性有href、target、id，以此实现点击a标签跳转新的文档或者文档的某个部分的功能。 </a></p>
+<p>href属性用来描述跳转链接的地址，target用来定义被链接的文档在何处显示。target的值常见的有：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> view_window</td>
+<td>文档重定向到单独的窗口</td>
+</tr>
+<tr>
+<td> name of frame</td>
+<td><frameset>将超链接内容定向到框架中</frameset></td>
+</tr>
+<tr>
+<td> _blank</td>
+<td>新打开、未命名窗口中载入文档</td>
+</tr>
+<tr>
+<td> _self</td>
+<td>没有指定目标的a标签的默认目标</td>
+</tr>
+<tr>
+<td> _parent</td>
+<td>文档载入父窗口或者包含来超链接引用的框架的框架集</td>
+</tr>
+<tr>
+<td> _top</td>
+<td>清除所有被包含的框架并将文档载入整个浏览器窗口</td>
+</tr>
+</tbody>
+</table>
+<p> 接下来重点讲常用的_blank，看看有什么有意思的地方。</p>
+<h3 id="1-1-target-”-blank”的使用"><a href="#1-1-target-”-blank”的使用" class="headerlink" title="1.1 target=”_blank”的使用"></a>1.1 target=”_blank”的使用</h3><p>用Google搜索的时候，会发现英文站点击搜索结果，结果页是在当前窗口刷新的；但如果是使用百度，点击搜索结果，是在新页面中打开的。对于使用谷歌网速不佳的情况，自己还是不太习惯同一个窗口打开。_blank可以用在这样一些情况：</p>
+<ol>
+<li>打开外部链接</li>
+<li>打开PDF文件</li>
+<li>用户播放一些音乐、视频等内容</li>
+<li>用户当前页面有操作，改变会导致操作丢失</li>
+</ol>
+<p>看起来用户体验还可以啊，也很方便啊，那就用用用起来吧。 但是， 真用起来问题还真是挺多啊，接下来看看有什么问题会被投诉吧。</p>
+<h2 id="2-target使用需注意的问题"><a href="#2-target使用需注意的问题" class="headerlink" title="2. target使用需注意的问题"></a>2. target使用需注意的问题</h2><p>这里主要讲讲target=”_blank”带来的问题。</p>
+<h3 id="2-1-target-”-blank”带来的问题"><a href="#2-1-target-”-blank”带来的问题" class="headerlink" title="2.1      target=”_blank”带来的问题"></a>2.1      target=”_blank”带来的问题</h3><p>新窗口打开页面看似简单，但直接使用target=”_blank”可能会出现如下情况： </p>
+<ol>
+<li><strong>兼容问题</strong>： opener的锅，如果href是“”， 使用target=”_blank”在Chrome中挺正常的，结果到了IE上就麻烦了，肿么打开了一个奇怪的空白页呀………………</li>
+<li><strong>安全问题</strong>： 又是opener的锅，谁让你可以跨域呢。之后就被钓鱼网站愉快的利用了。</li>
+<li><strong>性能问题</strong>： 还是opener的锅，opener怎么这么多锅…… 页面卡了啊………… 。</li>
+</ol>
+<h4 id="target-”-blank”的兼容性"><a href="#target-”-blank”的兼容性" class="headerlink" title="target=”_blank”的兼容性"></a>target=”_blank”的兼容性</h4><p>在chrome正常的打开原页面，IE是空白页。 如果用在列表上，后台传来的数据刚好href是空的，那这里就出bug了。<br>这里的原因是window.opener在chrome中自动设置成当前页面，然后新打开页面是当前页，所以整体观感还可以接受。 但似到了IE中，opener就直接打开aboutblank了，这个bug有点大。</p>
+<h4 id="target-”-blank”的安全性"><a href="#target-”-blank”的安全性" class="headerlink" title="target=”_blank”的安全性"></a>target=”_blank”的安全性</h4><p>这里的问题就是被钓鱼……<br>当我们使用target=”_blank”时，重定向页面使用window.open去打开，但是window.open这个对象是可以跨域的，也就是说我们可以随意修改js文件，在里面重新给window.open.location赋值，之后只要用户点击a标签，就会打开我们设置的链接。如果是个钓鱼网站，那就悲剧了。</p>
+<p>可以试一下最简单的：</p>
+<pre><code>    &lt;script type=&quot;text/javascript&quot;&gt;
+        window.opener.location = &quot;http://www.baidu.com&quot;;
+    &lt;/script&gt;
+</code></pre><p>接下来注意了，开始钓鱼：</p>
+<p><strong>1. 正常访问的页面，注意链接，注意链接</strong></p>
+<p>a标签是这样写的：</p>
+<pre><code>    &lt;a href=&quot;./hack.html&quot; target=&quot;_blank&quot;&gt;Click&lt;/a&gt;
+</code></pre><p><img src="./img/a-标签的target属性使用及注意问题/1.png" alt="1"></p>
+<p><strong>2. hack.html是a标签链接的页面，js的写法如下：</strong></p>
+<pre><code>    &lt;script type=&quot;text/javascript&quot;&gt;
+        var elements = document.getElementsByTagName(&#39;div&#39;);
+        if(window.opener) {
+            elements[0].innerHTML = &quot;钓鱼成功了&quot;;
+            opener.location = &quot;./target-blank.html?money=10000&quot;;
+        }
+        else{
+            elements[0].innerHTML = &quot;钓鱼失败了&quot;;
+        }
+    &lt;/script&gt;
+</code></pre><p><strong>3. 然后钓鱼成功了，原页面的地址被改掉</strong><br><img src="./img/a-标签的target属性使用及注意问题/2.png" alt="1"></p>
+<p><strong>接下来看看原页面的地址，关键是改掉了用户毫不知情啊毫不知情啊</strong>：<br><img src="./img/a-标签的target属性使用及注意问题/3.png" alt="1"><br>假设上面的opener.location = “./target-blank.html?money=10000”前面改成请求后端的接口地址，这个ajax请求刚好又是Get请求，哈哈，那就悲剧了。 当然，现在一般后台都有各种限制，有数据提交的情况不会用get方式处理。</p>
+<h4 id="target-”-blank”的性能问题"><a href="#target-”-blank”的性能问题" class="headerlink" title="target=”_blank”的性能问题"></a>target=”_blank”的性能问题</h4><p>target=”_blank”的性能问题在Chrome和Firefox会有涉及，IE没有这个问题。这里的问题原因是使用opener打开的新窗口和原有的窗口共用了一个进程。</p>
+<p>但素，正常打开一个页面不应该是新建一个进程么，这是因为opener对象的包含了DOM信息，两个进程无法控制这样的DOM，所以放在一个进程里。</p>
+<p>所以， 如果本身原有访问页面非常复杂，然后搞个钓鱼网站写个setInterval这样的函数，在原页面上点点点点点多几次a标签打开搞破坏网站的窗口，原页面就会卡死啦。</p>
+<h3 id="2-2-target-”-blank”的优化方案"><a href="#2-2-target-”-blank”的优化方案" class="headerlink" title="2.2 target=”_blank”的优化方案"></a>2.2 target=”_blank”的优化方案</h3><p>针对以上的问题，targe=’_blank’还是慎用，如果出现上述问题，那就通过为 a标签 加上 rel=”noopener noreferrer” 属性来解决。</p>
+<pre><code>&lt;a href=&quot;&quot; target=&quot;_blank&quot;  rel=&quot;noopener noreferrer&quot;&gt;
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/a标签-target/">a标签 target</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2017/09/05/a-标签的target属性使用及注意问题/" data-title="\&lt;a&gt;标签的target属性使用及注意问题 | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/07/11/Backbone学习笔记-3/"  title="Backbone学习笔记(3)">
+ <strong>NEXT:</strong><br/> 
+ <span>Backbone学习笔记(3)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-标签的target的使用"><span class="toc-number">1.</span> <span class="toc-text">1. \标签的target的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-target-”-blank”的使用"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 target=”_blank”的使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-target使用需注意的问题"><span class="toc-number">2.</span> <span class="toc-text">2. target使用需注意的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-target-”-blank”带来的问题"><span class="toc-number">2.1.</span> <span class="toc-text">2.1      target=”_blank”带来的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#target-”-blank”的兼容性"><span class="toc-number">2.1.1.</span> <span class="toc-text">target=”_blank”的兼容性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#target-”-blank”的安全性"><span class="toc-number">2.1.2.</span> <span class="toc-text">target=”_blank”的安全性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#target-”-blank”的性能问题"><span class="toc-number">2.1.3.</span> <span class="toc-text">target=”_blank”的性能问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-target-”-blank”的优化方案"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 target=”_blank”的优化方案</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Backbone/" title="Backbone">Backbone<sup>2</sup></a></li>
+		
+			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript-ES6-Tips/" title="JavaScript ES6 Tips">JavaScript ES6 Tips<sup>1</sup></a></li>
+		
+			<li><a href="/tags/a标签-target/" title="a标签 target">a标签 target<sup>1</sup></a></li>
+		
+			<li><a href="/tags/canvas-五子棋/" title="canvas 五子棋">canvas 五子棋<sup>1</sup></a></li>
+		
+			<li><a href="/tags/touch事件/" title="touch事件">touch事件<sup>1</sup></a></li>
+		
+			<li><a href="/tags/事件-冒泡/" title="事件 冒泡">事件 冒泡<sup>1</sup></a></li>
+		
+			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
+		
+			<li><a href="/tags/柯里化/" title="柯里化">柯里化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/真机-微信-远程调试/" title="真机 微信 远程调试">真机 微信 远程调试<sup>2</sup></a></li>
+		
+			<li><a href="/tags/脚手架工具/" title="脚手架工具">脚手架工具<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/tuzilingdang for https://github.com/tuzilingdang" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">My Github: <a href="https://github.com/tuzilingdang" target="_blank" title="">https://github.com/tuzilingdang</a> 
+		</p> 
+
+
+
+	<script src="/js/jquery-2.1.0.min.js"></script>
+	<script src="/js/prettify.js"></script>
+	<script type="text/javascript">
+	$(window).load(function(){
+	$('pre').addClass('prettyprint linenums').attr('style', 'overflow:scroll;');
+	 $('pre').addClass('prettyprint linenums');
+	   prettyPrint();
+	 })
+	</script>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
