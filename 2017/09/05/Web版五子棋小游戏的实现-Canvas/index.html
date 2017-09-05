@@ -1,0 +1,633 @@
+
+ <!DOCTYPE HTML>
+<html lang="中文">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>a标签的target属性使用及注意问题 | April&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="April Ji">
+    
+    <meta name="description" content="需求描述
+用canvas和dom两种方案写一个五子棋小游戏，不需要考虑人机对战。
+库和框架等不做要求，随意选择。
+
+想了半天，决定先实现canvas版。 除了以上两点需求之外，还应该完成如下要求：
+
+额外应该还要考虑到拓展性，实现棋盘列数、颜色、棋子半径等灵活配置
+在dom和canvas切换时实现的">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/april.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    <link rel="stylesheet" href="/css/desert.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/prettify.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/april.jpg" alt="April&#39;s Blog" title="April&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
+				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/09/05/Web版五子棋小游戏的实现-Canvas/" title="a标签的target属性使用及注意问题" itemprop="url">a标签的target属性使用及注意问题</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="April Ji">April Ji</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-09-05T15:11:43.000Z" itemprop="datePublished">2017-09-05</time>
+    更新日期:<time datetime="2017-09-05T15:44:11.000Z" itemprop="dateModified">2017-09-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求描述"><span class="toc-number">1.</span> <span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DEMO及代码"><span class="toc-number">2.</span> <span class="toc-text">DEMO及代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路"><span class="toc-number">3.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具体实现和分析"><span class="toc-number">4.</span> <span class="toc-text">具体实现和分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录结构"><span class="toc-number">4.1.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#入口函数"><span class="toc-number">4.2.</span> <span class="toc-text">入口函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五子棋的主要算法"><span class="toc-number">4.3.</span> <span class="toc-text">五子棋的主要算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#方案1"><span class="toc-number">4.3.1.</span> <span class="toc-text">方案1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#方案2"><span class="toc-number">4.3.2.</span> <span class="toc-text">方案2</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><ul>
+<li>用canvas和dom两种方案写一个五子棋小游戏，不需要考虑人机对战。</li>
+<li>库和框架等不做要求，随意选择。</li>
+</ul>
+<p>想了半天，决定先实现canvas版。 除了以上两点需求之外，还应该完成如下要求：</p>
+<ul>
+<li>额外应该还要考虑到拓展性，实现棋盘列数、颜色、棋子半径等灵活配置</li>
+<li>在dom和canvas切换时实现的代价最小。</li>
+</ul>
+<h2 id="DEMO及代码"><a href="#DEMO及代码" class="headerlink" title="DEMO及代码"></a>DEMO及代码</h2><p>具体代码可到我的github下载： <a href="https://github.com/tuzilingdang/backgammon-canvas" target="_blank" rel="external"><strong>canvas版五子棋</strong></a></p>
+<p>DEMO地址：<a href="https://tuzilingdang.github.io/backgammon-canvas/" target="_blank" rel="external"><strong>DEMO</strong></a></p>
+<p><img src="/img/Web版五子棋小游戏的实现-Canvas/1.png" alt="canvas实现的五子棋"></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>使用require.js实现模块化，整体代码比较简单，使用原生js或jquery即可</li>
+<li>棋盘和棋子的绘制使用canvas实现</li>
+<li>组合使用构造函数和原型模式，构造棋盘，棋子和Game的原型</li>
+</ol>
+<h2 id="具体实现和分析"><a href="#具体实现和分析" class="headerlink" title="具体实现和分析"></a>具体实现和分析</h2><h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><p><img src="/img/Web版五子棋小游戏的实现-Canvas/2.png" alt="目录结构"></p>
+<h3 id="入口函数"><a href="#入口函数" class="headerlink" title="入口函数"></a>入口函数</h3><p>入口函数在app.js中， 因依赖于require实现代码的模块化，需要对require做一个config配置：</p>
+<pre><code>require.config({
+    baseUrl: &#39;js/libs&#39;,
+    paths: {
+        app: &#39;../app&#39;,
+        game: &quot;../app/game&quot;,
+        checkerboard: &quot;../app/checkerboard&quot;,
+        piece: &quot;../app/piece&quot;,
+    }
+});
+</code></pre><p>app主逻辑入口如下：</p>
+<p>首先做好棋盘各属性的配置，还有棋子的半径定义。然后初始化Game。</p>
+<pre><code>require([&quot;jquery&quot;, &quot;game&quot;], function($, Game) {
+    var checkerBoard = {
+        id: &quot;checker-board&quot;,
+        rows: 20, // 棋盘列数
+        margin: 20, // 棋盘边框间距
+
+    };
+    var piece = {
+        r : 24
+    };
+
+    var game = new Game( checkerBoard, piece );
+    game.init();
+
+    $(&quot;#start&quot;).click(function() {
+        game.init();
+        game.start();
+        $(&quot;#start&quot;).unbind();
+    });
+});
+</code></pre><h3 id="五子棋的主要算法"><a href="#五子棋的主要算法" class="headerlink" title="五子棋的主要算法"></a>五子棋的主要算法</h3><p>主要算法想过两种方案： </p>
+<h4 id="方案1"><a href="#方案1" class="headerlink" title="方案1"></a>方案1</h4><p>这个方案比较麻烦，如果是三子连胜比较简单的话可以采用。大体思路是： </p>
+<ol>
+<li>设置一个5<em>5的正方形作为检测窗口，窗口从左上角开始，每次以step1格的距离像右移动，移动到最右边，然后以step为1格想下移动。若棋盘矩阵的长宽为n，也就是检测窗口一共移动了n-1 </em> n-1次。</li>
+<li>每次检测窗口移动，都要匹配对应棋盘的棋子状态是否与检测窗口的胜利状态一致。 检测窗口中胜利状态一共有12种，分别如下</li>
+<li>棋盘对应窗口的棋子与以上状态一致，则游戏结束。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">X</th>
+<th style="text-align:left">X</th>
+<th style="text-align:left">X</th>
+<th style="text-align:left">X</th>
+<th style="text-align:left">X</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+</tbody>
+</table>
+<p>……</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">X</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+</tbody>
+</table>
+<p>……</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">X</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">O</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">O</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">X</td>
+</tr>
+</tbody>
+</table>
+<h4 id="方案2"><a href="#方案2" class="headerlink" title="方案2"></a>方案2</h4><p>目前看起来最快的实现方法：</p>
+<ol>
+<li>每次下一个子，检察一下棋子周边的状态</li>
+<li>分别检测横向、竖向、斜向、反斜向的是否有连子，如果有，则判断颜色，返回胜方及结束状态。</li>
+<li>这里比较容易出错的是边界检测，如果边界检测代码写的有问题，会出现各种在边界点击的报错提示。</li>
+<li>添加了和棋的判断，毕竟有时格子太少，容易出现和棋的状态。</li>
+</ol>
+<p>代码如下：</p>
+<pre><code class="c">        caculateWinner: function(pos) {
+            var that = this;
+            var player = that.stateMatrix[pos.x][pos.y];
+
+            function checkDrawn() {
+                for (var i = 0; i &lt; that.matrixWidth; i++) {
+                    for (var j = 0; j &lt; that.matrixHeight; j++) {
+                        if (that.stateMatrix[i][j] === &quot;null&quot;) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            function checkHorizon() {
+                var count = 0;
+                for (var i = 1; i &lt; 5; i++) {
+                    if ((pos.x - i) &gt;= 0) {
+                        if ((that.stateMatrix[pos.x - i][pos.y] === player)) {
+                            count++;
+                        }
+                    }
+                }
+
+                for (var i = pos.x + 1; i &lt; 5 - count + pos.x; i++) {
+                    if (i &gt;= that.matrixWidth ) {
+                        return false;
+                    } else {
+                        if (that.stateMatrix[i][pos.y] !== player) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            function checkVertical() {
+                var count = 0;
+                for (var j = 1; j &lt; 5; j++) {
+                    if ((pos.y - j) &gt;= 0) {
+                        if ((that.stateMatrix[pos.x][pos.y - j] === player)) {
+                            count++;
+                        }
+                    }
+                }
+
+                for (var j = pos.y + 1; j &lt; 5 - count + pos.y; j++) {
+                    if (j &gt;= that.matrixHeight ) {
+                        return false;
+                    } else {
+                        if (that.stateMatrix[pos.x][j] !== player) {
+                            return false;
+                        }
+                    }
+
+                }
+                return true;
+            }
+
+            function checkDiagonal() {
+                var count = 0;
+                for (var j = 1; j &lt; 5; j++) {
+                    if ((pos.y - j) &gt;= 0 &amp;&amp; (pos.x - j) &gt;= 0) {
+                        if ((that.stateMatrix[pos.x - j][pos.y - j] === player)) {
+                            count++;
+                        }
+                    }
+                }
+                for (var j = 1; j &lt; 5 - count; j++) {
+                    if ((j + pos.y &gt;= that.matrixHeight ) || (j + pos.x &gt;= that.matrixHeight )) {
+                        return false;
+                    } else {
+                        if (that.stateMatrix[pos.x + j][pos.y + j] !== player) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            function checkReverseDiagonal() {
+                var count = 0;
+                for (var j = 1; j &lt; 5; j++) {
+                    if ((pos.y - j) &gt;= 0 &amp;&amp; (j + pos.x) &lt; that.matrixWidth ) {
+                        if ((that.stateMatrix[pos.x + j][pos.y - j] === player)) {
+                            count++;
+                        }
+                    }
+                }
+                for (var j = 1; j &lt; 5 - count; j++) {
+                    if ( ((j + pos.y) &gt;= that.matrixHeight ) || ((pos.x - j) &lt; 0) ){
+                        return false;
+                    } else {
+                        if (that.stateMatrix[pos.x - j][pos.y + j] !== player) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            if (!checkDrawn()) {
+                if (checkHorizon() || checkVertical() || checkDiagonal() || checkReverseDiagonal()) {
+                    return player;
+                } else {
+                    return &quot;N&quot;;
+                }
+            } else {
+                return &quot;D&quot;;
+            }
+        }
+</code></pre>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/a标签-target/">a标签 target</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2017/09/05/Web版五子棋小游戏的实现-Canvas/" data-title="a标签的target属性使用及注意问题 | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/07/11/Backbone学习笔记-3/"  title="Backbone学习笔记(3)">
+ <strong>NEXT:</strong><br/> 
+ <span>Backbone学习笔记(3)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求描述"><span class="toc-number">1.</span> <span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DEMO及代码"><span class="toc-number">2.</span> <span class="toc-text">DEMO及代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路"><span class="toc-number">3.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具体实现和分析"><span class="toc-number">4.</span> <span class="toc-text">具体实现和分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录结构"><span class="toc-number">4.1.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#入口函数"><span class="toc-number">4.2.</span> <span class="toc-text">入口函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五子棋的主要算法"><span class="toc-number">4.3.</span> <span class="toc-text">五子棋的主要算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#方案1"><span class="toc-number">4.3.1.</span> <span class="toc-text">方案1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#方案2"><span class="toc-number">4.3.2.</span> <span class="toc-text">方案2</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Backbone/" title="Backbone">Backbone<sup>2</sup></a></li>
+		
+			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript-ES6-Tips/" title="JavaScript ES6 Tips">JavaScript ES6 Tips<sup>1</sup></a></li>
+		
+			<li><a href="/tags/a标签-target/" title="a标签 target">a标签 target<sup>1</sup></a></li>
+		
+			<li><a href="/tags/canvas-五子棋/" title="canvas 五子棋">canvas 五子棋<sup>1</sup></a></li>
+		
+			<li><a href="/tags/touch事件/" title="touch事件">touch事件<sup>1</sup></a></li>
+		
+			<li><a href="/tags/事件-冒泡/" title="事件 冒泡">事件 冒泡<sup>1</sup></a></li>
+		
+			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
+		
+			<li><a href="/tags/柯里化/" title="柯里化">柯里化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/真机-微信-远程调试/" title="真机 微信 远程调试">真机 微信 远程调试<sup>2</sup></a></li>
+		
+			<li><a href="/tags/脚手架工具/" title="脚手架工具">脚手架工具<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/tuzilingdang for https://github.com/tuzilingdang" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">My Github: <a href="https://github.com/tuzilingdang" target="_blank" title="">https://github.com/tuzilingdang</a> 
+		</p> 
+
+
+
+	<script src="/js/jquery-2.1.0.min.js"></script>
+	<script src="/js/prettify.js"></script>
+	<script type="text/javascript">
+	$(window).load(function(){
+	$('pre').addClass('prettyprint linenums').attr('style', 'overflow:scroll;');
+	 $('pre').addClass('prettyprint linenums');
+	   prettyPrint();
+	 })
+	</script>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
