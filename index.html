@@ -92,9 +92,8 @@ href属性用来描述跳转链接的地址，target用来定义被链接的文�
     
      
            <p itemprop="description" >1. 最近碰到的问题最近工作中接到漏洞管理平台报出的安全漏洞，还原一下XSS攻击的思路：
-在input中输入\,点击保存后，发现居然弹出了cookie信息了啊。 这有点严重，具体看图：
-
-在input框输入下图中的img标签，类似的JavaScript标签像\,\,\    等都</p>
+在input中输入&amp;lt;img src=x onerror=alert(document.cookie)&amp;gt;,点击保存后，发现居然弹出了cookie信息了啊。 这有点严重，具体看图：
+</p>
         
     
     <time datetime="2017-07-12T13:05:21.000Z" itemprop="datePublished">2017-07-12</time>
