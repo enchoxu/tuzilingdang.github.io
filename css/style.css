@@ -85,6 +85,8 @@ td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
+  font-size: 80%;
+  color: #036903;
 }
 a img {
   border: none;
@@ -137,6 +139,7 @@ sub {
 a {
   text-decoration: none;
   color: #817c7c;
+  font-size: 1.2rem;
 }
 a:hover,
 a:focus {
@@ -411,7 +414,6 @@ body >header a {
 #imglogo {
   float: left;
   width: 4em;
-  height: 4em;
   border-radius: 500px;
 }
 @media only screen and (min-width: 768px) {
@@ -443,6 +445,7 @@ body >header a {
   float: left;
   width: 75%;
   margin-left: 0.5em;
+  margin-top: 0.6rem;
 }
 #textlogo h1.site-name {
   width: 86%;
@@ -869,7 +872,7 @@ article header.article-info >p.article-time:before {
   -moz-osx-font-smoothing: grayscale;
 }
 article .article-content {
-  padding: 1.5em 4%;
+  padding: 0.5em 4%;
 }
 article .article-content .kb {
   padding: 0.1em 0.6em;
@@ -887,8 +890,8 @@ article .article-content .kb {
 }
 article .article-content h1,
 article .article-content h2 {
-  font-size: 180%;
-  line-height: 1.2em;
+  font-size: 120%;
+  line-height: 2.5em;
 }
 article .article-content h3,
 article .article-content h4,
@@ -950,7 +953,8 @@ article .article-content blockquote cite {
 article .article-content ul,
 article .article-content ol {
   padding-left: 2em;
-  font-size: 105%;
+  font-size: 95%;
+  color: #9c9755;
 }
 @media only screen and (min-width: 768px) {
   article .article-content ul,
@@ -971,9 +975,8 @@ article .article-content dl dt {
   font-weight: blod;
 }
 p {
-  font-size: 105%;
+  font-size: 95%;
   line-height: 1.7;
-  margin: 0.7em 0;
 }
 @media only screen and (min-width: 1024px) {
   p {
@@ -1024,10 +1027,11 @@ table th {
   font-weight: bold;
   border-bottom: 3px solid #dbdbdb;
   padding-bottom: 0.5em;
+  padding-left: 10px;
 }
 table td {
   border-bottom: 1px solid #dbdbdb;
-  padding: 10px 0;
+  padding: 10px 10px;
 }
 .pullquote {
   text-align: left;
@@ -1044,6 +1048,9 @@ table td {
   margin-right: 0.5em;
   margin-left: 1em;
   float: right;
+}
+.toc-link {
+  font-size: 0.6em;
 }
 footer.article-footer {
   background: #fafafa;
@@ -1373,13 +1380,13 @@ section.comment {
 }
 .toc-article {
   background: #eee;
-  margin: 2em 0 0 0.5em;
   padding: 1em;
 }
 .toc-article strong {
   padding: 0.3em 0;
 }
 #toc {
+  width: 92%;
   line-height: 1em;
   font-size: 0.8em;
   float: right;
