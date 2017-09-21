@@ -38,7 +38,7 @@
 				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
 				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -51,7 +51,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yoursite.com">
 					</form>
 					
@@ -63,6 +63,27 @@
     </header>
     <div id="container">
       <div id="main">
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2017/09/21/JavaScript学习笔记-异步处理机制/" title="JavaScript学习笔记-异步处理机制" itemprop="url">
+  
+    <h1 itemprop="name">JavaScript学习笔记-异步处理机制</h1>
+    
+     
+           <p itemprop="description" >例子来看这样一个例子：
+async function async1(){
+    console.log(&amp;#39;async1 start&amp;#39;);
+    await async2();
+    console.log(&amp;#39;async1 end&amp;#39;);
+}
+
+</p>
+        
+    
+    <time datetime="2017-09-21T14:39:48.000Z" itemprop="datePublished">2017-09-21</time>
+  </a>
+</section>
 
   <section class="post" itemscope itemprop="blogPost">
   
@@ -212,37 +233,23 @@ if(var1 !== null || var1 !== undefined</p>
   </a>
 </section>
 
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2017/03/31/Qbuilt-实现并发布自己的脚手架工具/" title="Qbuilt-实现并发布自己的脚手架工具(1)" itemprop="url">
-  
-    <h1 itemprop="name">Qbuilt-实现并发布自己的脚手架工具(1)</h1>
-    
-     
-           <p itemprop="description" >常用的脚手架工具有yoman等，现在比较火的react开发网上也有create-react-app等等可以直接安装过来使用。但是平时自己做项目会根据不同的框架、类库等等选择不同的目录结构。如果能有一个工具把自己的不同的项目目录作为常用模板添加进去，之后就可以各种愉快的选择不同的模</p>
-        
-    
-    <time datetime="2017-03-31T14:05:16.000Z" itemprop="datePublished">2017-03-31</time>
-  </a>
-</section>
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Backbone/" title="Backbone">Backbone<sup>3</sup></a></li>

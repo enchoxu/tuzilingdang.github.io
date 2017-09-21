@@ -1,0 +1,456 @@
+
+ <!DOCTYPE HTML>
+<html lang="中文">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>JavaScript学习笔记-异步处理机制 | April&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="April Ji">
+    
+    <meta name="description" content="例子来看这样一个例子：
+async function async1(){
+    console.log(&amp;#39;async1 start&amp;#39;);
+    await async2();
+    console.log(&amp;#39;async1 end&amp;#39;);
+}
+
+async func">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/april.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/april.jpg">
+    <link rel="stylesheet" href="/css/desert.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/prettify.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/april.jpg" alt="April&#39;s Blog" title="April&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
+				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/09/21/JavaScript学习笔记-异步处理机制/" title="JavaScript学习笔记-异步处理机制" itemprop="url">JavaScript学习笔记-异步处理机制</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="April Ji">April Ji</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-09-21T14:39:48.000Z" itemprop="datePublished">2017-09-21</time>
+    Updated:<time datetime="2017-09-21T14:43:01.000Z" itemprop="dateModified">2017-09-21</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">1.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript的异步处理机制"><span class="toc-number">2.</span> <span class="toc-text">JavaScript的异步处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（2）事件循环"><span class="toc-number">2.1.</span> <span class="toc-text">（2）事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）堆、栈和队列"><span class="toc-number">2.2.</span> <span class="toc-text">（3）堆、栈和队列</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#堆、栈和队列"><span class="toc-number">2.2.1.</span> <span class="toc-text">堆、栈和队列</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）同步任务和异步任务"><span class="toc-number">2.3.</span> <span class="toc-text">（3）同步任务和异步任务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子的代码执行过程"><span class="toc-number">3.</span> <span class="toc-text">例子的代码执行过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（1）压栈顺序"><span class="toc-number">3.1.</span> <span class="toc-text">（1）压栈顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-任务队列"><span class="toc-number">3.2.</span> <span class="toc-text">(2) 任务队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-为什么setTimeout的回调结果最后才显示？"><span class="toc-number">3.3.</span> <span class="toc-text">(3) 为什么setTimeout的回调结果最后才显示？</span></a></li></ol></li></ol>
+		</div>
+		
+		<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>来看这样一个例子：</p>
+<pre><code>async function async1(){
+    console.log(&#39;async1 start&#39;);
+    await async2();
+    console.log(&#39;async1 end&#39;);
+}
+
+async function async2() {
+    console.log(&#39;async2 start&#39;);
+}
+
+console.log(&#39;script start&#39;);
+
+async1();
+
+setTimeout(function(){
+    console.log(&#39;setTimeout&#39;);
+},0);
+
+new Promise(function(resolve){
+    console.log(&#39;promise start&#39;);
+    resolve();
+}).then(function(){
+    console.log(&#39;promise end&#39;);
+});
+
+console.log(&#39;script end&#39;);
+</code></pre><p>思考程序输出的结果，没仔细想的话，结果可能是这样的：</p>
+<pre><code>script start
+async1 start
+async2 start
+async1 end
+promise start
+script end
+setTimeout
+promise end
+</code></pre><p>再仔细想想，这次应该对了吧？</p>
+<pre><code>script start
+async1 start
+async2 start
+promise start
+script end
+async1 end
+setTimeout
+promise end
+</code></pre><p>用node执行以下看看，居然还是不对呀，结果居然是这样的：</p>
+<pre><code>script start
+async1 start
+async2 start
+promise start
+script end
+async1 end
+promise end
+setTimeout
+</code></pre><h3 id="JavaScript的异步处理机制"><a href="#JavaScript的异步处理机制" class="headerlink" title="JavaScript的异步处理机制"></a>JavaScript的异步处理机制</h3><p>####（1） JavaScript的单线程</p>
+<p>作为浏览器中使用的语言，JavaScript一个最大的特点是单线程。 具体线程和进程的知识可以参考阮一峰大神的博客<a href="http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html" target="_blank" rel="external">进程与线程的一个简单解释</a>，非常形象的讲解了这两个概念。</p>
+<p>这就说明在执行一段代码时，运行了一个进程，在这个进程上只能运行一个线程。所有任务的执行都需要排队进行。</p>
+<h4 id="（2）事件循环"><a href="#（2）事件循环" class="headerlink" title="（2）事件循环"></a>（2）事件循环</h4><p><strong>神马是事件循环</strong></p>
+<ol>
+<li>事件循环用于浏览器管理事件、用户交互、scrpts、渲染、网络等。</li>
+<li>每个用户代理必须有且只有一个事件循环。</li>
+<li>一个事件循环必须至少有一个浏览器上下文，也就是一个document对象的的执行环境。浏览器上下文消失。事件循环也随之消失。</li>
+<li>事件循环可以有多个任务队列，一个任务队列中有一系列任务的顺序列表。这些任务包括以下内容：<br>事件、回调函数、HTML解析、异步获取资源、DOM操作。</li>
+</ol>
+<p><strong>实现方式类似这样</strong>：</p>
+<pre><code>while (queue.waitForMessage()) {
+  queue.processNextMessage();
+}
+</code></pre><p>事件循环中每次执行完一个消息，才会开始执行下一个。比如，调用setTimeout时，传入两个参数，一个需要执行的回调函数，一个是时间段。这个时间段过后，将会在队列中添加一条信息。如果有其他消息需要处理，这时setTimeout的回调函数也需要等待其他消息处理完才能够执行。</p>
+<p>事件循环还有一个重要的特性是不会阻塞。正由于异步的机制，比如等待一个ajax请求返回数据前，JavaScript还是可以同时处理其他的事情。</p>
+<h4 id="（3）堆、栈和队列"><a href="#（3）堆、栈和队列" class="headerlink" title="（3）堆、栈和队列"></a>（3）堆、栈和队列</h4><h5 id="堆、栈和队列"><a href="#堆、栈和队列" class="headerlink" title="堆、栈和队列"></a>堆、栈和队列</h5><p>下图是MDN Docs上对JavaScript的堆、栈和队列的描述：</p>
+<p><img src="https://developer.mozilla.org/files/4617/default.svg" alt="栈堆和队列"></p>
+<p><strong>【堆】</strong></p>
+<p>堆中的内存是未被分配大小的。 一段代码中的对象会被分配到堆中。</p>
+<p><strong>【栈】</strong></p>
+<p>这里的栈是JavaScript的调用栈，遵循FILO的原则。先被调用的函数会被先压栈，后被调用的函数再次压栈，执行完毕后，上层的函数先出栈，然后是下一个函数。</p>
+<p><strong>【任务队列】</strong></p>
+<p>JavaScript运行时会包含一个待处理的消息队列。每个消息会关联一个函数。</p>
+<h4 id="（3）同步任务和异步任务"><a href="#（3）同步任务和异步任务" class="headerlink" title="（3）同步任务和异步任务"></a>（3）同步任务和异步任务</h4><p>在JavaScript执行中，可以把任务分成两种，一种是同步任务，一种是异步任务。结合（1）和（2）中所述，我们可以归纳如下的过程：</p>
+<p>（1）JavaScript是单线程的，这里的同步任务就全部放在主线程上执行，前一个任务执行完毕，才能执行下一个任务。</p>
+<p>（2）异步任务会放入任务队列，只有主线程的同步任务执行完了才开始读取任务队列上的异步任务。</p>
+<p>（3）每当任务被完成时（可以是一个IO的读取、ajax请求或用户事件等），任务队列中就会添加进来一个事件，下一步这个异步任务就被放入执行栈中。主线程开始处理执行栈中的函数。</p>
+<p>（4）主线程循环处理第（1）（2）（3）个步骤。</p>
+<h3 id="例子的代码执行过程"><a href="#例子的代码执行过程" class="headerlink" title="例子的代码执行过程"></a>例子的代码执行过程</h3><h4 id="（1）压栈顺序"><a href="#（1）压栈顺序" class="headerlink" title="（1）压栈顺序"></a>（1）压栈顺序</h4><p>所有任务均按上述过程在主线程进行处理，整体压栈顺序及出栈顺序可见下图：</p>
+<p><img src="1.png" alt="压栈顺序图"><br>! [压栈顺序图]（1.png）</p>
+<h4 id="2-任务队列"><a href="#2-任务队列" class="headerlink" title="(2) 任务队列"></a>(2) 任务队列</h4><p>任务队列中放入的是异步任务，任务完成时，会添加进来一个事件。主线程执行完同步任务后开始执行异步任务。依次有以下几个任务：</p>
+<ol>
+<li><p>console.log(‘async1 end’);</p>
+</li>
+<li><p>promise.then(function(){<br> console.log(‘promise end’);<br>});</p>
+</li>
+<li><p>function() {<br> console.log(‘setTimeout’);<br>};</p>
+</li>
+</ol>
+<h4 id="3-为什么setTimeout的回调结果最后才显示？"><a href="#3-为什么setTimeout的回调结果最后才显示？" class="headerlink" title="(3) 为什么setTimeout的回调结果最后才显示？"></a>(3) 为什么setTimeout的回调结果最后才显示？</h4><p>可参见这篇博客：<a href="http://www.tuicool.com/articles/MnY7N3a" target="_blank" rel="external">从Promise来看JavaScript中的Event Loop、Tasks和Microtasks</a>。<br>博客中有这样一个例子：</p>
+<pre><code>(function test() {
+    setTimeout(function() {console.log(4)}, 0);
+    new Promise(function executor(resolve) {
+        console.log(1);
+        for( var i=0 ; i&lt;10000 ; i++ ) {
+            i == 9999 &amp;&amp; resolve();
+        }
+        console.log(2);
+    }).then(function() {
+        console.log(5);
+    });
+    console.log(3);
+})()
+</code></pre><p>正常思考后执行结果应该是 1 2 3 4 5， 但是执行的结果其实是1 2 3 5 4 。</p>
+<p>接下来是对HTML5规范的翻译：</p>
+<p><strong><em>Eventloop的处理模型</em></strong></p>
+<ol>
+<li>如果跟Documents有关的任务没有被完全激活，那就在Eventloop的任务队列中跑最早的任务。浏览器可以选择任意任务执行。</li>
+<li>如果Eventloop没有出现存储互斥，那就释放掉。（这个不懂……）</li>
+<li>第一步中的task如果已经被执行了，那就从任务队列中把它移除。</li>
+<li><p>如果Eventloop不是 worker’s event loop， 那么执行以下三小步。</p>
+<ol>
+<li>执行microtask检查</li>
+<li>提供一个稳定的状态</li>
+<li>如果必要的话更新Document或浏览器上下文的渲染和用户交互来反映当前状态。</li>
+</ol>
+</li>
+<li>如果eventloop在全局作用域下执行，但在任务队列中没有事件，并且此时全局作用域对象中的closingFlag是true的话，那就销毁event loop。</li>
+<li>从第一步重复执行。</li>
+</ol>
+<p>在这里promise的回校应该是被添加到了microtask队列中执行了，然后先输出5， 之后再执行下一个任务输出4。</p>
+<p>看了半天，感觉还是理解的不清楚，之后有时间这部分内容会继续补充。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2017/09/21/JavaScript学习笔记-异步处理机制/" data-title="JavaScript学习笔记-异步处理机制 | April&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/09/19/JavaScript学习笔记-bind函数/"  title="JavaScript学习笔记-bind函数">
+ <strong>NEXT:</strong><br/> 
+ <span>JavaScript学习笔记-bind函数
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">1.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript的异步处理机制"><span class="toc-number">2.</span> <span class="toc-text">JavaScript的异步处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（2）事件循环"><span class="toc-number">2.1.</span> <span class="toc-text">（2）事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）堆、栈和队列"><span class="toc-number">2.2.</span> <span class="toc-text">（3）堆、栈和队列</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#堆、栈和队列"><span class="toc-number">2.2.1.</span> <span class="toc-text">堆、栈和队列</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）同步任务和异步任务"><span class="toc-number">2.3.</span> <span class="toc-text">（3）同步任务和异步任务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子的代码执行过程"><span class="toc-number">3.</span> <span class="toc-text">例子的代码执行过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（1）压栈顺序"><span class="toc-number">3.1.</span> <span class="toc-text">（1）压栈顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-任务队列"><span class="toc-number">3.2.</span> <span class="toc-text">(2) 任务队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-为什么setTimeout的回调结果最后才显示？"><span class="toc-number">3.3.</span> <span class="toc-text">(3) 为什么setTimeout的回调结果最后才显示？</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Backbone/" title="Backbone">Backbone<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript-ES6-Tips/" title="JavaScript ES6 Tips">JavaScript ES6 Tips<sup>1</sup></a></li>
+		
+			<li><a href="/tags/a标签-target/" title="a标签 target">a标签 target<sup>1</sup></a></li>
+		
+			<li><a href="/tags/canvas-五子棋/" title="canvas 五子棋">canvas 五子棋<sup>1</sup></a></li>
+		
+			<li><a href="/tags/javascript/" title="javascript">javascript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/touch事件/" title="touch事件">touch事件<sup>1</sup></a></li>
+		
+			<li><a href="/tags/事件-冒泡/" title="事件 冒泡">事件 冒泡<sup>1</sup></a></li>
+		
+			<li><a href="/tags/安全/" title="安全">安全<sup>1</sup></a></li>
+		
+			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
+		
+			<li><a href="/tags/柯里化/" title="柯里化">柯里化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/真机-微信-远程调试/" title="真机 微信 远程调试">真机 微信 远程调试<sup>2</sup></a></li>
+		
+			<li><a href="/tags/脚手架工具/" title="脚手架工具">脚手架工具<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/tuzilingdang for https://github.com/tuzilingdang" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">My Github: <a href="https://github.com/tuzilingdang" target="_blank" title="">https://github.com/tuzilingdang</a> 
+		</p> 
+
+
+
+	<script src="/js/jquery-2.1.0.min.js"></script>
+	<script src="/js/prettify.js"></script>
+	<script type="text/javascript">
+	$(window).load(function(){
+	$('pre').addClass('prettyprint linenums').attr('style', 'overflow:scroll;');
+	 $('pre').addClass('prettyprint linenums');
+	   prettyPrint();
+	 })
+	</script>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
