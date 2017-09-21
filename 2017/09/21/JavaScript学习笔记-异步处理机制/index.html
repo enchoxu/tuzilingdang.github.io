@@ -45,7 +45,7 @@ async func">
 				<h1 class="site-name"><a href="/" title="April&#39;s Blog">April&#39;s Blog</a></h1>
 				<h2 class="blog-motto">Starry starry night，paint your palette blue and grey</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -58,7 +58,7 @@ async func">
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:yoursite.com">
 					</form>
 					
@@ -82,7 +82,7 @@ async func">
     </p>
   <p class="article-time">
     <time datetime="2017-09-21T14:39:48.000Z" itemprop="datePublished">2017-09-21</time>
-    Updated:<time datetime="2017-09-21T14:43:01.000Z" itemprop="dateModified">2017-09-21</time>
+    更新日期:<time datetime="2017-09-21T15:11:38.000Z" itemprop="dateModified">2017-09-21</time>
     
   </p>
 </header>
@@ -90,7 +90,7 @@ async func">
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">1.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript的异步处理机制"><span class="toc-number">2.</span> <span class="toc-text">JavaScript的异步处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（2）事件循环"><span class="toc-number">2.1.</span> <span class="toc-text">（2）事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）堆、栈和队列"><span class="toc-number">2.2.</span> <span class="toc-text">（3）堆、栈和队列</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#堆、栈和队列"><span class="toc-number">2.2.1.</span> <span class="toc-text">堆、栈和队列</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）同步任务和异步任务"><span class="toc-number">2.3.</span> <span class="toc-text">（3）同步任务和异步任务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子的代码执行过程"><span class="toc-number">3.</span> <span class="toc-text">例子的代码执行过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（1）压栈顺序"><span class="toc-number">3.1.</span> <span class="toc-text">（1）压栈顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-任务队列"><span class="toc-number">3.2.</span> <span class="toc-text">(2) 任务队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-为什么setTimeout的回调结果最后才显示？"><span class="toc-number">3.3.</span> <span class="toc-text">(3) 为什么setTimeout的回调结果最后才显示？</span></a></li></ol></li></ol>
 		</div>
 		
@@ -178,7 +178,7 @@ setTimeout
 <p>（3）每当任务被完成时（可以是一个IO的读取、ajax请求或用户事件等），任务队列中就会添加进来一个事件，下一步这个异步任务就被放入执行栈中。主线程开始处理执行栈中的函数。</p>
 <p>（4）主线程循环处理第（1）（2）（3）个步骤。</p>
 <h3 id="例子的代码执行过程"><a href="#例子的代码执行过程" class="headerlink" title="例子的代码执行过程"></a>例子的代码执行过程</h3><h4 id="（1）压栈顺序"><a href="#（1）压栈顺序" class="headerlink" title="（1）压栈顺序"></a>（1）压栈顺序</h4><p>所有任务均按上述过程在主线程进行处理，整体压栈顺序及出栈顺序可见下图：</p>
-<p><img src="1.png" alt="压栈顺序图"><br>! [压栈顺序图]（1.png）</p>
+<p><img src="/img/JavaScript学习笔记-异步处理机制/1.png" alt="压栈顺序图"></p>
 <h4 id="2-任务队列"><a href="#2-任务队列" class="headerlink" title="(2) 任务队列"></a>(2) 任务队列</h4><p>任务队列中放入的是异步任务，任务完成时，会添加进来一个事件。主线程执行完同步任务后开始执行异步任务。依次有以下几个任务：</p>
 <ol>
 <li><p>console.log(‘async1 end’);</p>
@@ -225,6 +225,11 @@ setTimeout
 	</div>
 		<footer class="article-footer clearfix">
 
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JavaScript学习笔记-异步/">JavaScript学习笔记; 异步</a>
+  </div>
+
 
 
 
@@ -252,22 +257,22 @@ setTimeout
 
 	
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
   <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">1.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript的异步处理机制"><span class="toc-number">2.</span> <span class="toc-text">JavaScript的异步处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（2）事件循环"><span class="toc-number">2.1.</span> <span class="toc-text">（2）事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）堆、栈和队列"><span class="toc-number">2.2.</span> <span class="toc-text">（3）堆、栈和队列</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#堆、栈和队列"><span class="toc-number">2.2.1.</span> <span class="toc-text">堆、栈和队列</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）同步任务和异步任务"><span class="toc-number">2.3.</span> <span class="toc-text">（3）同步任务和异步任务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子的代码执行过程"><span class="toc-number">3.</span> <span class="toc-text">例子的代码执行过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（1）压栈顺序"><span class="toc-number">3.1.</span> <span class="toc-text">（1）压栈顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-任务队列"><span class="toc-number">3.2.</span> <span class="toc-text">(2) 任务队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-为什么setTimeout的回调结果最后才显示？"><span class="toc-number">3.3.</span> <span class="toc-text">(3) 为什么setTimeout的回调结果最后才显示？</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Backbone/" title="Backbone">Backbone<sup>3</sup></a></li>
@@ -275,6 +280,8 @@ setTimeout
 			<li><a href="/tags/Hexo使用/" title="Hexo使用">Hexo使用<sup>1</sup></a></li>
 		
 			<li><a href="/tags/JavaScript-ES6-Tips/" title="JavaScript ES6 Tips">JavaScript ES6 Tips<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript学习笔记-异步/" title="JavaScript学习笔记; 异步">JavaScript学习笔记; 异步<sup>1</sup></a></li>
 		
 			<li><a href="/tags/a标签-target/" title="a标签 target">a标签 target<sup>1</sup></a></li>
 		
@@ -289,6 +296,8 @@ setTimeout
 			<li><a href="/tags/安全/" title="安全">安全<sup>1</sup></a></li>
 		
 			<li><a href="/tags/对象-继承/" title="对象 继承">对象 继承<sup>1</sup></a></li>
+		
+			<li><a href="/tags/异步/" title="异步">异步<sup>0</sup></a></li>
 		
 			<li><a href="/tags/架构-微信小程序/" title="架构  微信小程序">架构  微信小程序<sup>1</sup></a></li>
 		
