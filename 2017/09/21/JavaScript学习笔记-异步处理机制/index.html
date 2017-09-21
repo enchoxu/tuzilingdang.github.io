@@ -82,7 +82,7 @@ async func">
     </p>
   <p class="article-time">
     <time datetime="2017-09-21T14:39:48.000Z" itemprop="datePublished">2017-09-21</time>
-    Updated:<time datetime="2017-09-21T15:15:00.000Z" itemprop="dateModified">2017-09-21</time>
+    Updated:<time datetime="2017-09-21T15:17:06.000Z" itemprop="dateModified">2017-09-21</time>
     
   </p>
 </header>
@@ -91,10 +91,10 @@ async func">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">1.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript的异步处理机制"><span class="toc-number">2.</span> <span class="toc-text">JavaScript的异步处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）事件循环"><span class="toc-number">2.1.</span> <span class="toc-text">（2）事件循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）堆、栈和队列"><span class="toc-number">2.2.</span> <span class="toc-text">（3）堆、栈和队列</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#堆、栈和队列"><span class="toc-number">2.2.1.</span> <span class="toc-text">堆、栈和队列</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）同步任务和异步任务"><span class="toc-number">2.3.</span> <span class="toc-text">（3）同步任务和异步任务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子的代码执行过程"><span class="toc-number">3.</span> <span class="toc-text">例子的代码执行过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）压栈顺序"><span class="toc-number">3.1.</span> <span class="toc-text">（1）压栈顺序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-任务队列"><span class="toc-number">3.2.</span> <span class="toc-text">(2) 任务队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-为什么setTimeout的回调结果最后才显示？"><span class="toc-number">3.3.</span> <span class="toc-text">(3) 为什么setTimeout的回调结果最后才显示？</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">1.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript的异步处理机制"><span class="toc-number">2.</span> <span class="toc-text">JavaScript的异步处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（2）事件循环"><span class="toc-number">2.1.</span> <span class="toc-text">（2）事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）堆、栈和队列"><span class="toc-number">2.2.</span> <span class="toc-text">（3）堆、栈和队列</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#堆、栈和队列"><span class="toc-number">2.2.1.</span> <span class="toc-text">堆、栈和队列</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）同步任务和异步任务"><span class="toc-number">2.3.</span> <span class="toc-text">（3）同步任务和异步任务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子的代码执行过程"><span class="toc-number">3.</span> <span class="toc-text">例子的代码执行过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（1）压栈顺序"><span class="toc-number">3.1.</span> <span class="toc-text">（1）压栈顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-任务队列"><span class="toc-number">3.2.</span> <span class="toc-text">(2) 任务队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-为什么setTimeout的回调结果最后才显示？"><span class="toc-number">3.3.</span> <span class="toc-text">(3) 为什么setTimeout的回调结果最后才显示？</span></a></li></ol></li></ol>
 		</div>
 		
-		<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>来看这样一个例子：</p>
+		<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>来看这样一个例子：</p>
 <pre><code>async function async1(){
     console.log(&#39;async1 start&#39;);
     await async2();
@@ -148,10 +148,10 @@ script end
 async1 end
 promise end
 setTimeout
-</code></pre><h2 id="JavaScript的异步处理机制"><a href="#JavaScript的异步处理机制" class="headerlink" title="JavaScript的异步处理机制"></a>JavaScript的异步处理机制</h2><p>###（1） JavaScript的单线程</p>
+</code></pre><h3 id="JavaScript的异步处理机制"><a href="#JavaScript的异步处理机制" class="headerlink" title="JavaScript的异步处理机制"></a>JavaScript的异步处理机制</h3><p>####（1） JavaScript的单线程</p>
 <p>作为浏览器中使用的语言，JavaScript一个最大的特点是单线程。 具体线程和进程的知识可以参考阮一峰大神的博客<a href="http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html" target="_blank" rel="external">进程与线程的一个简单解释</a>，非常形象的讲解了这两个概念。</p>
 <p>这就说明在执行一段代码时，运行了一个进程，在这个进程上只能运行一个线程。所有任务的执行都需要排队进行。</p>
-<h3 id="（2）事件循环"><a href="#（2）事件循环" class="headerlink" title="（2）事件循环"></a>（2）事件循环</h3><p><strong>神马是事件循环</strong></p>
+<h4 id="（2）事件循环"><a href="#（2）事件循环" class="headerlink" title="（2）事件循环"></a>（2）事件循环</h4><p><strong>神马是事件循环</strong></p>
 <ol>
 <li>事件循环用于浏览器管理事件、用户交互、scrpts、渲染、网络等。</li>
 <li>每个用户代理必须有且只有一个事件循环。</li>
@@ -164,7 +164,7 @@ setTimeout
 }
 </code></pre><p>事件循环中每次执行完一个消息，才会开始执行下一个。比如，调用setTimeout时，传入两个参数，一个需要执行的回调函数，一个是时间段。这个时间段过后，将会在队列中添加一条信息。如果有其他消息需要处理，这时setTimeout的回调函数也需要等待其他消息处理完才能够执行。</p>
 <p>事件循环还有一个重要的特性是不会阻塞。正由于异步的机制，比如等待一个ajax请求返回数据前，JavaScript还是可以同时处理其他的事情。</p>
-<h3 id="（3）堆、栈和队列"><a href="#（3）堆、栈和队列" class="headerlink" title="（3）堆、栈和队列"></a>（3）堆、栈和队列</h3><h4 id="堆、栈和队列"><a href="#堆、栈和队列" class="headerlink" title="堆、栈和队列"></a>堆、栈和队列</h4><p>下图是MDN Docs上对JavaScript的堆、栈和队列的描述：</p>
+<h4 id="（3）堆、栈和队列"><a href="#（3）堆、栈和队列" class="headerlink" title="（3）堆、栈和队列"></a>（3）堆、栈和队列</h4><h5 id="堆、栈和队列"><a href="#堆、栈和队列" class="headerlink" title="堆、栈和队列"></a>堆、栈和队列</h5><p>下图是MDN Docs上对JavaScript的堆、栈和队列的描述：</p>
 <p><img src="https://developer.mozilla.org/files/4617/default.svg" alt="栈堆和队列"></p>
 <p><strong>【堆】</strong></p>
 <p>堆中的内存是未被分配大小的。 一段代码中的对象会被分配到堆中。</p>
@@ -172,14 +172,14 @@ setTimeout
 <p>这里的栈是JavaScript的调用栈，遵循FILO的原则。先被调用的函数会被先压栈，后被调用的函数再次压栈，执行完毕后，上层的函数先出栈，然后是下一个函数。</p>
 <p><strong>【任务队列】</strong></p>
 <p>JavaScript运行时会包含一个待处理的消息队列。每个消息会关联一个函数。</p>
-<h3 id="（3）同步任务和异步任务"><a href="#（3）同步任务和异步任务" class="headerlink" title="（3）同步任务和异步任务"></a>（3）同步任务和异步任务</h3><p>在JavaScript执行中，可以把任务分成两种，一种是同步任务，一种是异步任务。结合（1）和（2）中所述，我们可以归纳如下的过程：</p>
+<h4 id="（3）同步任务和异步任务"><a href="#（3）同步任务和异步任务" class="headerlink" title="（3）同步任务和异步任务"></a>（3）同步任务和异步任务</h4><p>在JavaScript执行中，可以把任务分成两种，一种是同步任务，一种是异步任务。结合（1）和（2）中所述，我们可以归纳如下的过程：</p>
 <p>（1）JavaScript是单线程的，这里的同步任务就全部放在主线程上执行，前一个任务执行完毕，才能执行下一个任务。</p>
 <p>（2）异步任务会放入任务队列，只有主线程的同步任务执行完了才开始读取任务队列上的异步任务。</p>
 <p>（3）每当任务被完成时（可以是一个IO的读取、ajax请求或用户事件等），任务队列中就会添加进来一个事件，下一步这个异步任务就被放入执行栈中。主线程开始处理执行栈中的函数。</p>
 <p>（4）主线程循环处理第（1）（2）（3）个步骤。</p>
-<h2 id="例子的代码执行过程"><a href="#例子的代码执行过程" class="headerlink" title="例子的代码执行过程"></a>例子的代码执行过程</h2><h3 id="（1）压栈顺序"><a href="#（1）压栈顺序" class="headerlink" title="（1）压栈顺序"></a>（1）压栈顺序</h3><p>所有任务均按上述过程在主线程进行处理，整体压栈顺序及出栈顺序可见下图：</p>
+<h3 id="例子的代码执行过程"><a href="#例子的代码执行过程" class="headerlink" title="例子的代码执行过程"></a>例子的代码执行过程</h3><h4 id="（1）压栈顺序"><a href="#（1）压栈顺序" class="headerlink" title="（1）压栈顺序"></a>（1）压栈顺序</h4><p>所有任务均按上述过程在主线程进行处理，整体压栈顺序及出栈顺序可见下图：</p>
 <p><img src="/img/JavaScript学习笔记-异步处理机制/1.png" alt="压栈顺序图"></p>
-<h3 id="2-任务队列"><a href="#2-任务队列" class="headerlink" title="(2) 任务队列"></a>(2) 任务队列</h3><p>任务队列中放入的是异步任务，任务完成时，会添加进来一个事件。主线程执行完同步任务后开始执行异步任务。依次有以下几个任务：</p>
+<h4 id="2-任务队列"><a href="#2-任务队列" class="headerlink" title="(2) 任务队列"></a>(2) 任务队列</h4><p>任务队列中放入的是异步任务，任务完成时，会添加进来一个事件。主线程执行完同步任务后开始执行异步任务。依次有以下几个任务：</p>
 <ol>
 <li><p>console.log(‘async1 end’);</p>
 </li>
@@ -188,7 +188,7 @@ setTimeout
 <li><p>function() {<br> console.log(‘setTimeout’);<br>};</p>
 </li>
 </ol>
-<h3 id="3-为什么setTimeout的回调结果最后才显示？"><a href="#3-为什么setTimeout的回调结果最后才显示？" class="headerlink" title="(3) 为什么setTimeout的回调结果最后才显示？"></a>(3) 为什么setTimeout的回调结果最后才显示？</h3><p>可参见这篇博客：<a href="http://www.tuicool.com/articles/MnY7N3a" target="_blank" rel="external">从Promise来看JavaScript中的Event Loop、Tasks和Microtasks</a>。<br>博客中有这样一个例子：</p>
+<h4 id="3-为什么setTimeout的回调结果最后才显示？"><a href="#3-为什么setTimeout的回调结果最后才显示？" class="headerlink" title="(3) 为什么setTimeout的回调结果最后才显示？"></a>(3) 为什么setTimeout的回调结果最后才显示？</h4><p>可参见这篇博客：<a href="http://www.tuicool.com/articles/MnY7N3a" target="_blank" rel="external">从Promise来看JavaScript中的Event Loop、Tasks和Microtasks</a>。<br>博客中有这样一个例子：</p>
 <pre><code>(function test() {
     setTimeout(function() {console.log(4)}, 0);
     new Promise(function executor(resolve) {
@@ -261,7 +261,7 @@ setTimeout
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">1.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript的异步处理机制"><span class="toc-number">2.</span> <span class="toc-text">JavaScript的异步处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）事件循环"><span class="toc-number">2.1.</span> <span class="toc-text">（2）事件循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）堆、栈和队列"><span class="toc-number">2.2.</span> <span class="toc-text">（3）堆、栈和队列</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#堆、栈和队列"><span class="toc-number">2.2.1.</span> <span class="toc-text">堆、栈和队列</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）同步任务和异步任务"><span class="toc-number">2.3.</span> <span class="toc-text">（3）同步任务和异步任务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子的代码执行过程"><span class="toc-number">3.</span> <span class="toc-text">例子的代码执行过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）压栈顺序"><span class="toc-number">3.1.</span> <span class="toc-text">（1）压栈顺序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-任务队列"><span class="toc-number">3.2.</span> <span class="toc-text">(2) 任务队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-为什么setTimeout的回调结果最后才显示？"><span class="toc-number">3.3.</span> <span class="toc-text">(3) 为什么setTimeout的回调结果最后才显示？</span></a></li></ol></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">1.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript的异步处理机制"><span class="toc-number">2.</span> <span class="toc-text">JavaScript的异步处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（2）事件循环"><span class="toc-number">2.1.</span> <span class="toc-text">（2）事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）堆、栈和队列"><span class="toc-number">2.2.</span> <span class="toc-text">（3）堆、栈和队列</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#堆、栈和队列"><span class="toc-number">2.2.1.</span> <span class="toc-text">堆、栈和队列</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#（3）同步任务和异步任务"><span class="toc-number">2.3.</span> <span class="toc-text">（3）同步任务和异步任务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子的代码执行过程"><span class="toc-number">3.</span> <span class="toc-text">例子的代码执行过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#（1）压栈顺序"><span class="toc-number">3.1.</span> <span class="toc-text">（1）压栈顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-任务队列"><span class="toc-number">3.2.</span> <span class="toc-text">(2) 任务队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-为什么setTimeout的回调结果最后才显示？"><span class="toc-number">3.3.</span> <span class="toc-text">(3) 为什么setTimeout的回调结果最后才显示？</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
